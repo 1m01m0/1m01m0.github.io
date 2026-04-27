@@ -1001,10 +1001,9 @@ button {
 }
 
 .contact-section {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
+  flex-direction: column;
   gap: 32px;
-  align-items: center;
   width: 100%;
   max-width: none;
   background: var(--ink);
@@ -1227,8 +1226,7 @@ button {
     font-size: 4rem;
   }
 
-  .intro-grid,
-  .contact-section {
+  .intro-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1473,7 +1471,7 @@ button {
   top: calc(100% + 6px);
   right: 0;
   z-index: 100;
-  min-width: 130px;
+  min-width: 170px;
   list-style: none;
   margin: 0;
   padding: 6px;

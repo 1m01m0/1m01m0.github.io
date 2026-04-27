@@ -695,7 +695,7 @@ const translations = {
 };
 
 const langLocales = { zh: "zh-CN", en: "en", ko: "ko", ja: "ja", de: "de", es: "es", fr: "fr", "zh-TW": "zh-TW" };
-const langNames = { zh: "简体中文", en: "English", ko: "한국어", ja: "日本語", de: "Deutsch", es: "Español", fr: "Français", "zh-TW": "繁體中文" };
+const langNames = { zh: "🇨🇳 简体中文", en: "🇺🇸 English", ko: "🇰🇷 한국어", ja: "🇯🇵 日本語", de: "🇩🇪 Deutsch", es: "🇪🇸 Español", fr: "🇫🇷 Français", "zh-TW": "🇭🇰 繁體中文" };
 
 let currentLang = "zh";
 
