@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="emo 的 GitHub Pages 个人主页，来自南京工业大学（NJTECH）。"
+    />
+    <title>emo | GitHub Pages</title>
+    <link rel="preload" as="image" href="assets/claude-workspace.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="#top" aria-label="回到首页">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>emo</span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="打开导航" aria-expanded="false" data-nav-toggle>
+        <i data-lucide="menu"></i>
+      </button>
+
+      <nav class="site-nav" data-nav>
+        <a href="#lab" data-i18n="nav.lab">实验室</a>
+        <a href="#work" data-i18n="nav.work">项目</a>
+        <a href="#notes" data-i18n="nav.notes">写作</a>
+        <a href="#stack" data-i18n="nav.stack">工具箱</a>
+        <a href="#contact" data-i18n="nav.contact">联系</a>
+        <div class="lang-picker" data-lang-picker>
+          <button class="lang-btn" type="button" aria-haspopup="listbox" aria-expanded="false" data-lang-btn>
+            <i data-lucide="globe"></i>
+            <span data-lang-current>简体中文</span>
+            <i data-lucide="chevron-down" class="lang-chevron" aria-hidden="true"></i>
+          </button>
+          <ul class="lang-menu" role="listbox" aria-label="选择语言" data-lang-menu>
+            <li class="lang-option is-active" role="option" data-lang-val="zh">简体中文</li>
+            <li class="lang-option" role="option" data-lang-val="en">English</li>
+            <li class="lang-option" role="option" data-lang-val="ko">한국어</li>
+            <li class="lang-option" role="option" data-lang-val="ja">日本語</li>
+            <li class="lang-option" role="option" data-lang-val="de">Deutsch</li>
+            <li class="lang-option" role="option" data-lang-val="es">Español</li>
+            <li class="lang-option" role="option" data-lang-val="fr">Français</li>
+            <li class="lang-option" role="option" data-lang-val="zh-TW">繁體中文</li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title" data-hero>
+        <div class="hero-motion" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <canvas class="tech-canvas" data-tech-canvas aria-hidden="true"></canvas>
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="hero.eyebrow">NJTECH / 南京工业大学</p>
+          <h1 id="hero-title">emo</h1>
+          <p class="hero-lede" data-i18n="hero.lede">
+            我来自南京工业大学（NJTECH），把复杂问题拆成清晰的系统、可运行的产品和耐读的文字。这里收藏我近期的项目、研究笔记与开源实验。
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#work">
+              <i data-lucide="sparkles"></i>
+              <span data-i18n="hero.cta">查看项目</span>
+            </a>
+            <a class="button button-secondary" href="https://github.com/1m01m0">
+              <i data-lucide="github"></i>
+              <span>GitHub</span>
+            </a>
+          </div>
+          <div class="hero-console" data-tilt>
+            <div class="console-topline">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <strong>~/agentic-lab</strong>
+            </div>
+            <pre><code><span class="prompt">></span> <span data-typewriter>npm run ship</span><span class="caret" aria-hidden="true"></span></code></pre>
+            <div class="console-metrics">
+              <span><strong data-live="latency">28</strong> ms</span>
+              <span><strong data-live="tokens">12.8</strong> tok/s</span>
+              <span><strong data-live="uptime">99.9</strong>%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section intro-band" aria-label="简介">
+        <div class="intro-grid">
+          <p data-i18n="intro.text">
+            南京工业大学（NJTECH）学生，关注 AI 应用、全栈工程、数据产品与开发者体验。喜欢把模糊的想法整理成稳定的接口、克制的界面和可以复用的文档。
+          </p>
+          <div class="quick-stats" aria-label="快速信息">
+            <div>
+              <strong data-count="12" data-suffix="+">12+</strong>
+              <span data-i18n="stats.projects">项目原型</span>
+            </div>
+            <div>
+              <strong data-count="36">36</strong>
+              <span data-i18n="stats.notes">技术笔记</span>
+            </div>
+            <div>
+              <strong data-count="4">4</strong>
+              <span data-i18n="stats.research">研究方向</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section lab-section" id="lab" aria-labelledby="lab-title">
+        <div class="section-heading">
+          <p class="eyebrow">Interactive Lab</p>
+          <h2 id="lab-title" data-i18n="lab.title">会动的技术展示台</h2>
+        </div>
+
+        <div class="lab-grid">
+          <div class="tech-board" data-tilt>
+            <div class="orbit" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <i></i>
+            </div>
+            <div class="board-copy">
+              <p data-i18n="lab.desc">实时 Canvas、滚动触发、3D hover、动态指标和命令行打字，全都在这个静态页面里完成。</p>
+              <div class="board-tags">
+                <span>Canvas</span>
+                <span>IntersectionObserver</span>
+                <span>CSS Variables</span>
+                <span>Pointer Events</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pipeline" aria-label="工作流动画">
+            <div class="pipeline-track" aria-hidden="true"></div>
+            <div class="pipeline-step">
+              <i data-lucide="radar"></i>
+              <span>Observe</span>
+            </div>
+            <div class="pipeline-step">
+              <i data-lucide="braces"></i>
+              <span>Model</span>
+            </div>
+            <div class="pipeline-step">
+              <i data-lucide="git-branch"></i>
+              <span>Iterate</span>
+            </div>
+            <div class="pipeline-step">
+              <i data-lucide="rocket"></i>
+              <span>Ship</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="work" aria-labelledby="work-title">
+        <div class="section-heading">
+          <p class="eyebrow">Selected Work</p>
+          <h2 id="work-title" data-i18n="work.title">近期项目</h2>
+        </div>
+
+        <div class="filter-bar" role="list" aria-label="项目分类">
+          <button class="filter is-active" type="button" data-filter="all" data-i18n="filter.all">全部</button>
+          <button class="filter" type="button" data-filter="ai">AI</button>
+          <button class="filter" type="button" data-filter="web">Web</button>
+          <button class="filter" type="button" data-filter="data">Data</button>
+        </div>
+
+        <div class="project-grid">
+          <article class="project-card" data-category="ai" data-tilt>
+            <div class="project-topline">
+              <span class="dot dot-clay"></span>
+              <span>AI Copilot</span>
+            </div>
+            <h3 data-i18n="card.qa.title">知识库问答工作台</h3>
+            <p data-i18n="card.qa.desc">面向团队文档的检索、引用和答案审校流程，把模型输出收束进可追踪的工作流。</p>
+            <a href="https://github.com/1m01m0" aria-label="打开知识库问答工作台项目">
+              <span data-i18n="card.qa.link">查看仓库</span>
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </article>
+
+          <article class="project-card" data-category="web" data-tilt>
+            <div class="project-topline">
+              <span class="dot dot-olive"></span>
+              <span>Frontend</span>
+            </div>
+            <h3 data-i18n="card.ds.title">设计系统实验室</h3>
+            <p data-i18n="card.ds.desc">一套轻量组件、主题变量和可访问性校验页面，用来快速验证产品界面想法。</p>
+            <a href="https://github.com/1m01m0" aria-label="打开设计系统实验室项目">
+              <span data-i18n="card.ds.link">查看仓库</span>
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </article>
+
+          <article class="project-card" data-category="data" data-tilt>
+            <div class="project-topline">
+              <span class="dot dot-sky"></span>
+              <span>Data Product</span>
+            </div>
+            <h3 data-i18n="card.dash.title">个人指标仪表盘</h3>
+            <p data-i18n="card.dash.desc">把阅读、训练、写作和代码活动整合到一个本地优先的分析界面。</p>
+            <a href="https://github.com/1m01m0" aria-label="打开个人指标仪表盘项目">
+              <span data-i18n="card.dash.link">查看仓库</span>
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section notes-section" id="notes" aria-labelledby="notes-title">
+        <div class="section-heading">
+          <p class="eyebrow">Notes</p>
+          <h2 id="notes-title" data-i18n="notes.title">最近在想</h2>
+        </div>
+
+        <div class="note-list">
+          <a class="note-item" href="#">
+            <span>01</span>
+            <strong data-i18n="note.1">从提示词到产品协议：让 AI 功能更稳定的三个层次</strong>
+            <i data-lucide="arrow-right"></i>
+          </a>
+          <a class="note-item" href="#">
+            <span>02</span>
+            <strong data-i18n="note.2">为什么好的内部工具应该更像编辑器，而不是表单集合</strong>
+            <i data-lucide="arrow-right"></i>
+          </a>
+          <a class="note-item" href="#">
+            <span>03</span>
+            <strong data-i18n="note.3">用小型数据产品记录长期生活，而不是追踪短期波动</strong>
+            <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+      </section>
+
+      <section class="section stack-section" id="stack" aria-labelledby="stack-title">
+        <div class="section-heading">
+          <p class="eyebrow">Stack</p>
+          <h2 id="stack-title" data-i18n="stack.title">工具箱</h2>
+        </div>
+
+        <div class="stack-grid">
+          <div class="stack-column">
+            <h3>Build</h3>
+            <p>TypeScript, React, Node.js, Python, SQLite</p>
+          </div>
+          <div class="stack-column">
+            <h3>Think</h3>
+            <p>LLM workflows, retrieval, evaluation, interface systems</p>
+          </div>
+          <div class="stack-column">
+            <h3>Ship</h3>
+            <p>GitHub Actions, Vercel, Docker, observability notes</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section contact-section" id="contact" aria-labelledby="contact-title">
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h2 id="contact-title" data-i18n="contact.title">一起做点有意思的东西。</h2>
+        </div>
+        <div class="contact-actions">
+          <a class="button button-primary" href="mailto:yimo.edu@gmail.com">
+            <i data-lucide="mail"></i>
+            <span>yimo.edu@gmail.com</span>
+          </a>
+          <button class="button button-dark" type="button" data-copy="yimo.edu@gmail.com">
+            <i data-lucide="copy"></i>
+            <span data-i18n="contact.copy">复制邮箱</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© <span data-year></span> emo</span>
+      <span data-i18n="footer.palette">coding by emo</span>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
