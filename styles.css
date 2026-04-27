@@ -1017,6 +1017,7 @@ button {
 .contact-section h2 {
   max-width: 780px;
   color: var(--page);
+  white-space: nowrap;
 }
 
 .contact-section .eyebrow {
