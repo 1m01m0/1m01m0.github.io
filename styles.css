@@ -888,6 +888,14 @@ button {
   background: var(--swatch-sky);
 }
 
+.dot-cactus {
+  background: var(--swatch-cactus);
+}
+
+.dot-heather {
+  background: var(--swatch-heather);
+}
+
 .project-card h3 {
   margin: 34px 0 0;
   color: var(--ink);
