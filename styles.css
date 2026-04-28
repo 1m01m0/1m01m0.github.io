@@ -521,7 +521,7 @@ button {
 
 .lab-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr) minmax(180px, 0.6fr);
   gap: 18px;
   align-items: stretch;
 }
@@ -710,6 +710,43 @@ button {
   width: 22px;
   height: 22px;
   color: var(--swatch-clay);
+}
+
+.globe-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+}
+
+.globe-card:active {
+  cursor: grabbing;
+}
+
+.globe-canvas {
+  width: 260px;
+  height: 260px;
+  display: block;
+}
+
+.globe-hint {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--swatch-gray-450);
+  font-size: 0.75rem;
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms;
+  white-space: nowrap;
+}
+
+.globe-card:hover .globe-hint {
+  opacity: 1;
 }
 
 .intro-band {
@@ -1383,6 +1420,11 @@ button {
   .tech-board {
     min-height: auto;
     padding: 20px;
+  }
+
+  .globe-canvas {
+    width: 200px;
+    height: 200px;
   }
 
   .orbit {

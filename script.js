@@ -427,6 +427,7 @@ const translations = {
     "research.title": "研究方向",
     "lab.title": "会动的技术展示台",
     "lab.desc": "实时 Canvas、滚动触发、3D hover、动态指标和命令行打字，全都在这个静态页面里完成。",
+    "lab.globe_hint": "拖拽旋转地球",
     "filter.all": "全部",
     "research.qa.title": "知识库问答工作台",
     "research.qa.desc": "面向团队文档的检索、引用和答案审校流程，我正在研究 RAG 在文档审校中的实践效果。",
@@ -486,6 +487,7 @@ const translations = {
     "research.title": "Research Interests",
     "lab.title": "Living Tech Showcase",
     "lab.desc": "Real-time Canvas, scroll triggers, 3D hover, live metrics, and a typing CLI — all done inside this static page.",
+    "lab.globe_hint": "Drag to rotate the globe",
     "filter.all": "All",
     "research.qa.title": "Knowledge Base Q&A Workbench",
     "research.qa.desc": "Retrieval, citation, and answer review flow for team documentation — I'm studying the practical impact of RAG on document review.",
@@ -545,6 +547,7 @@ const translations = {
     "research.title": "연구 방향",
     "lab.title": "살아있는 기술 쇼케이스",
     "lab.desc": "실시간 Canvas, 스크롤 트리거, 3D 호버, 라이브 지표, 타이핑 CLI — 모두 이 정적 페이지에서 구현되었습니다.",
+    "lab.globe_hint": "드래그하여 지구본 회전",
     "filter.all": "전체",
     "research.qa.title": "지식 베이스 Q&A 워크벤치",
     "research.qa.desc": "팀 문서를 위한 검색, 인용, 답변 검토 흐름 — RAG가 문서 검토에 미치는 실질적 영향을 연구 중입니다.",
@@ -604,6 +607,7 @@ const translations = {
     "research.title": "研究方向",
     "lab.title": "動くテック展示台",
     "lab.desc": "リアルタイムCanvas、スクロールトリガー、3Dホバー、ライブメトリクス、タイピングCLI — すべてこの静的ページで実現。",
+    "lab.globe_hint": "ドラッグして地球を回転",
     "filter.all": "すべて",
     "research.qa.title": "ナレッジベースQ&Aワークベンチ",
     "research.qa.desc": "チームドキュメントの検索・引用・回答レビューフロー — ドキュメントレビューにおけるRAGの実践的効果を研究中です。",
@@ -663,6 +667,7 @@ const translations = {
     "research.title": "Forschungsinteressen",
     "lab.title": "Lebendiges Tech-Schaufenster",
     "lab.desc": "Echtzeit-Canvas, Scroll-Trigger, 3D-Hover, Live-Metriken und eine tippende CLI — alles in dieser statischen Seite.",
+    "lab.globe_hint": "Ziehen, um den Globus zu drehen",
     "filter.all": "Alle",
     "research.qa.title": "Wissensbasis-Q&A-Werkbank",
     "research.qa.desc": "Such-, Zitat- und Antwortprüfungsablauf für Teamdokumente — ich untersuche die praktische Wirkung von RAG auf Dokumentenprüfung.",
@@ -722,6 +727,7 @@ const translations = {
     "research.title": "Intereses de Investigación",
     "lab.title": "Vitrina tecnológica viva",
     "lab.desc": "Canvas en tiempo real, disparadores de scroll, hover 3D, métricas en vivo y escritura de comandos — todo en esta página estática.",
+    "lab.globe_hint": "Arrastra para girar el globo",
     "filter.all": "Todos",
     "research.qa.title": "Banco de trabajo Q&A",
     "research.qa.desc": "Flujo de búsqueda, citación y revisión de respuestas para documentos de equipo — investigando el impacto práctico de RAG en la revisión documental.",
@@ -781,6 +787,7 @@ const translations = {
     "research.title": "Intérêts de Recherche",
     "lab.title": "Vitrine technologique vivante",
     "lab.desc": "Canvas en temps réel, déclencheurs de défilement, survol 3D, métriques en direct et frappe CLI — tout dans cette page statique.",
+    "lab.globe_hint": "Faites glisser pour faire pivoter le globe",
     "filter.all": "Tous",
     "research.qa.title": "Atelier Q&R de base de connaissances",
     "research.qa.desc": "Flux de recherche, citation et révision des réponses pour la documentation d'équipe — j'étudie l'impact pratique du RAG sur la révision documentaire.",
@@ -840,6 +847,7 @@ const translations = {
     "research.title": "研究方向",
     "lab.title": "會動的技術展示台",
     "lab.desc": "即時 Canvas、捲動觸發、3D hover、動態指標和命令列打字，全都在這個靜態頁面裡完成。",
+    "lab.globe_hint": "拖曳旋轉地球",
     "filter.all": "全部",
     "research.qa.title": "知識庫問答工作台",
     "research.qa.desc": "面向團隊文件的檢索、引用和答案審校流程，我正在研究 RAG 在文件審校中的實務效果。",
@@ -930,3 +938,151 @@ document.addEventListener("keydown", (e) => {
     langBtn?.focus();
   }
 });
+
+(function initGlobe() {
+  var card = document.querySelector('[data-globe-card]');
+  var canvas = document.querySelector('[data-globe-canvas]');
+  if (!card || !canvas || typeof THREE === 'undefined') return;
+
+  var scene, camera, renderer, earthMesh;
+  var isDragging = false;
+  var prevX = 0, prevY = 0;
+  var velocityX = 0, velocityY = 0;
+  var autoRotate = !reduceMotion;
+  var animFrameId;
+  var isVisible = false;
+  var canvasSize;
+
+  function setupScene() {
+    canvasSize = canvas.clientWidth || 260;
+
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+    camera.position.z = 3.8;
+
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setSize(canvasSize, canvasSize, false);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    var geometry = new THREE.SphereGeometry(1.25, 64, 64);
+
+    var loader = new THREE.TextureLoader();
+    loader.crossOrigin = 'anonymous';
+    var texture = loader.load(
+      'https://unpkg.com/three-globe@2.45.2/example/img/earth-blue-marble.jpg',
+      function() {
+        if (earthMesh) earthMesh.material.needsUpdate = true;
+      }
+    );
+
+    var material = new THREE.MeshPhongMaterial({
+      map: texture,
+      specular: 0x222222,
+      shininess: 12
+    });
+
+    earthMesh = new THREE.Mesh(geometry, material);
+    scene.add(earthMesh);
+
+    var ambientLight = new THREE.AmbientLight(0x506080, 1.4);
+    scene.add(ambientLight);
+
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+    directionalLight.position.set(5, 3, 5);
+    scene.add(directionalLight);
+
+    var fillLight = new THREE.DirectionalLight(0x8899cc, 0.6);
+    fillLight.position.set(-3, -1, -3);
+    scene.add(fillLight);
+
+    var atmosphereGeom = new THREE.SphereGeometry(1.33, 64, 64);
+    var atmosphereMat = new THREE.MeshPhongMaterial({
+      color: 0x4a90d9,
+      transparent: true,
+      opacity: 0.07,
+      side: THREE.FrontSide
+    });
+    var atmosphere = new THREE.Mesh(atmosphereGeom, atmosphereMat);
+    scene.add(atmosphere);
+  }
+
+  function resize() {
+    var size = canvas.clientWidth || canvasSize;
+    if (!size || size === canvasSize) return;
+    renderer.setSize(size, size, false);
+    canvasSize = size;
+  }
+
+  function animate() {
+    animFrameId = requestAnimationFrame(animate);
+
+    if (!isVisible) return;
+
+    if (!isDragging && autoRotate) {
+      earthMesh.rotation.y += 0.0025;
+    }
+
+    velocityX *= 0.94;
+    velocityY *= 0.94;
+    earthMesh.rotation.y += velocityX;
+    earthMesh.rotation.x += velocityY;
+    earthMesh.rotation.x = Math.max(-Math.PI / 2.4, Math.min(Math.PI / 2.4, earthMesh.rotation.x));
+
+    renderer.render(scene, camera);
+  }
+
+  function onPointerDown(e) {
+    e.preventDefault();
+    isDragging = true;
+    prevX = e.clientX;
+    prevY = e.clientY;
+    velocityX = 0;
+    velocityY = 0;
+    card.style.cursor = 'grabbing';
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging) return;
+    var dx = e.clientX - prevX;
+    var dy = e.clientY - prevY;
+    velocityX = dx * 0.006;
+    velocityY = dy * 0.006;
+    prevX = e.clientX;
+    prevY = e.clientY;
+  }
+
+  function onPointerUp() {
+    isDragging = false;
+    card.style.cursor = '';
+  }
+
+  function setupEvents() {
+    card.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      isVisible = entry.isIntersecting;
+    });
+  }, { threshold: 0.1 });
+
+  setupScene();
+  setupEvents();
+  animate();
+  observer.observe(card);
+
+  window.addEventListener('resize', function() {
+    resize();
+  });
+
+  if (autoRotate) {
+    var mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    mql.addEventListener('change', function(e) {
+      autoRotate = !e.matches;
+    });
+  }
+})();
