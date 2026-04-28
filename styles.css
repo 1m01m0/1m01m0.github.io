@@ -1362,7 +1362,8 @@ button {
   }
 
   .section-heading h2,
-  .contact-section h2 {
+  .contact-section h2,
+  .summary-heading {
     font-size: 2.35rem;
   }
 
@@ -1409,6 +1410,24 @@ button {
 
   .note-item strong {
     font-size: 1.05rem;
+  }
+
+  .education-card {
+    padding: 20px;
+  }
+
+  .education-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .education-date {
+    white-space: normal;
+  }
+
+  .education-details {
+    margin-top: 16px;
+    padding-top: 16px;
   }
 
   .site-footer {
@@ -1518,6 +1537,77 @@ button {
   color: var(--accent-active);
 }
 
+.summary-eyebrow {
+  color: var(--swatch-clay);
+}
+
+.summary-heading {
+  margin: 0 0 16px;
+  color: var(--page);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.25rem;
+  font-weight: 500;
+  line-height: 1.04;
+}
+
+.education-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--swatch-gray-100);
+  padding: 28px;
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.education-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.education-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.education-row h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.35rem;
+}
+
+.education-row p {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+}
+
+.education-date {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.education-details {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.education-details p {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.education-details p:first-child {
+  margin-top: 0;
+}
+
+.education-details strong {
+  color: var(--ink);
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,

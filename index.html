@@ -24,10 +24,12 @@
       </button>
 
       <nav class="site-nav" data-nav>
+        <a href="#summary" data-i18n="nav.summary">简介</a>
+        <a href="#education" data-i18n="nav.education">教育</a>
+        <a href="#skills" data-i18n="nav.skills">技能</a>
+        <a href="#research" data-i18n="nav.research">研究方向</a>
         <a href="#lab" data-i18n="nav.lab">实验室</a>
-        <a href="#work" data-i18n="nav.work">项目</a>
-        <a href="#notes" data-i18n="nav.notes">写作</a>
-        <a href="#stack" data-i18n="nav.stack">工具箱</a>
+        <a href="#writings" data-i18n="nav.writings">笔记</a>
         <a href="#contact" data-i18n="nav.contact">联系</a>
         <div class="lang-picker" data-lang-picker>
           <button class="lang-btn" type="button" aria-haspopup="listbox" aria-expanded="false" data-lang-btn>
@@ -64,7 +66,7 @@
             我来自南京工业大学（NJTECH），计算机科学与技术专业本科在读。研究方向为大语言模型（LLM）、自然语言处理（NLP）与强化学习（RL）。这里收藏我近期的项目、研究笔记与开源实验。
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#work">
+            <a class="button button-primary" href="#research">
               <i data-lucide="sparkles"></i>
               <span data-i18n="hero.cta">查看项目</span>
             </a>
@@ -90,11 +92,15 @@
         </div>
       </section>
 
-      <section class="section intro-band" aria-label="简介">
+      <section class="section intro-band" id="summary" aria-labelledby="summary-title">
         <div class="intro-grid">
-          <p data-i18n="intro.text">
-            南京工业大学（NJTECH）计算机科学与技术专业学生，关注大语言模型（LLM）、NLP、强化学习、全栈工程与开发者体验。喜欢把模糊的想法整理成稳定的接口、克制的界面和可以复用的文档。
-          </p>
+          <div>
+            <p class="eyebrow summary-eyebrow" data-i18n="summary.eyebrow">Summary</p>
+            <h2 id="summary-title" class="summary-heading" data-i18n="summary.title">个人简介</h2>
+            <p data-i18n="summary.text">
+              南京工业大学（NJTECH）计算机科学与技术专业学生，关注大语言模型（LLM）、NLP、强化学习、全栈工程与开发者体验。喜欢把模糊的想法整理成稳定的接口、克制的界面和可以复用的文档。
+            </p>
+          </div>
           <div class="quick-stats" aria-label="快速信息">
             <div>
               <strong data-count="12" data-suffix="+">12+</strong>
@@ -109,6 +115,129 @@
               <span data-i18n="stats.research">研究方向</span>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="section" id="education" aria-labelledby="education-title">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="education.eyebrow">Education</p>
+          <h2 id="education-title" data-i18n="education.title">教育背景</h2>
+        </div>
+        <div class="education-card">
+          <div class="education-row">
+            <div>
+              <h3 data-i18n="education.school">南京工业大学 (NJTECH)</h3>
+              <p data-i18n="education.degree">计算机科学与技术 本科</p>
+            </div>
+            <span class="education-date" data-i18n="education.date">2024 - 2028 (预计)</span>
+          </div>
+          <div class="education-details">
+            <p><strong data-i18n="education.focus_label">研究方向：</strong><span data-i18n="education.focus">大语言模型 (LLM)、自然语言处理 (NLP)、强化学习 (RL)</span></p>
+            <p><strong data-i18n="education.courses_label">相关课程：</strong><span data-i18n="education.courses">数据结构、算法分析、机器学习、自然语言处理、深度学习、操作系统、计算机网络</span></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section stack-section" id="skills" aria-labelledby="skills-title">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="skills.eyebrow">Skills</p>
+          <h2 id="skills-title" data-i18n="skills.title">专业技能</h2>
+        </div>
+
+        <div class="stack-grid">
+          <div class="stack-column">
+            <h3>Build</h3>
+            <p>TypeScript, React, Node.js, Python, SQLite</p>
+          </div>
+          <div class="stack-column">
+            <h3>Think</h3>
+            <p>LLM workflows, retrieval, evaluation, interface systems</p>
+          </div>
+          <div class="stack-column">
+            <h3>Ship</h3>
+            <p>GitHub Actions, Vercel, Docker, observability notes</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="research" aria-labelledby="research-title">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="research.eyebrow">Research Interests</p>
+          <h2 id="research-title" data-i18n="research.title">研究方向</h2>
+        </div>
+
+        <div class="filter-bar" role="list" aria-label="项目分类">
+          <button class="filter is-active" type="button" data-filter="all" data-i18n="filter.all">全部</button>
+          <button class="filter" type="button" data-filter="ai">AI</button>
+          <button class="filter" type="button" data-filter="web">Web</button>
+          <button class="filter" type="button" data-filter="data">Data</button>
+        </div>
+
+        <div class="project-grid">
+          <article class="project-card" data-category="ai" data-tilt>
+            <div class="project-topline">
+              <span class="dot dot-clay"></span>
+              <span>AI Copilot</span>
+            </div>
+            <h3 data-i18n="research.qa.title">知识库问答工作台</h3>
+            <p data-i18n="research.qa.desc">面向团队文档的检索、引用和答案审校流程，把模型输出收束进可追踪的工作流。</p>
+            <a href="https://github.com/1m01m0" aria-label="打开知识库问答工作台项目">
+              <span data-i18n="research.qa.link">查看仓库</span>
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </article>
+
+          <article class="project-card" data-category="web" data-tilt>
+            <div class="project-topline">
+              <span class="dot dot-olive"></span>
+              <span>Frontend</span>
+            </div>
+            <h3 data-i18n="research.ds.title">设计系统实验室</h3>
+            <p data-i18n="research.ds.desc">一套轻量组件、主题变量和可访问性校验页面，用来快速验证产品界面想法。</p>
+            <a href="https://github.com/1m01m0" aria-label="打开设计系统实验室项目">
+              <span data-i18n="research.ds.link">查看仓库</span>
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </article>
+
+          <article class="project-card" data-category="data" data-tilt>
+            <div class="project-topline">
+              <span class="dot dot-sky"></span>
+              <span>Data Product</span>
+            </div>
+            <h3 data-i18n="research.dash.title">个人指标仪表盘</h3>
+            <p data-i18n="research.dash.desc">把阅读、训练、写作和代码活动整合到一个本地优先的分析界面。</p>
+            <a href="https://github.com/1m01m0" aria-label="打开个人指标仪表盘项目">
+              <span data-i18n="research.dash.link">查看仓库</span>
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </article>
+
+          <article class="project-card" data-category="ai" data-tilt>
+            <div class="project-topline">
+              <span class="dot dot-cactus"></span>
+              <span>Multi-Agent</span>
+            </div>
+            <h3 data-i18n="research.edict.title">三省六部制</h3>
+            <p data-i18n="research.edict.desc">基于 OpenClaw 的多智能体编排系统，9 个专业化 AI Agent 协作，配有实时仪表盘与完整审计追踪。</p>
+            <a href="https://github.com/cft0808/edict" target="_blank" rel="noopener" aria-label="打开 三省六部制 项目">
+              <span data-i18n="research.edict.link">查看仓库</span>
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </article>
+
+          <article class="project-card" data-category="ai" data-tilt>
+            <div class="project-topline">
+              <span class="dot dot-heather"></span>
+              <span>AI Assistant</span>
+            </div>
+            <h3 data-i18n="research.openclaw.title">OpenClaw</h3>
+            <p data-i18n="research.openclaw.desc">个人 AI 助手，跨平台运行，支持多通道消息接入，本地优先的智能助理框架。</p>
+            <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener" aria-label="打开 OpenClaw 项目">
+              <span data-i18n="research.openclaw.link">查看仓库</span>
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </article>
         </div>
       </section>
 
@@ -159,91 +288,10 @@
         </div>
       </section>
 
-      <section class="section" id="work" aria-labelledby="work-title">
+      <section class="section notes-section" id="writings" aria-labelledby="writings-title">
         <div class="section-heading">
-          <p class="eyebrow">Selected Work</p>
-          <h2 id="work-title" data-i18n="work.title">近期项目</h2>
-        </div>
-
-        <div class="filter-bar" role="list" aria-label="项目分类">
-          <button class="filter is-active" type="button" data-filter="all" data-i18n="filter.all">全部</button>
-          <button class="filter" type="button" data-filter="ai">AI</button>
-          <button class="filter" type="button" data-filter="web">Web</button>
-          <button class="filter" type="button" data-filter="data">Data</button>
-        </div>
-
-        <div class="project-grid">
-          <article class="project-card" data-category="ai" data-tilt>
-            <div class="project-topline">
-              <span class="dot dot-clay"></span>
-              <span>AI Copilot</span>
-            </div>
-            <h3 data-i18n="card.qa.title">知识库问答工作台</h3>
-            <p data-i18n="card.qa.desc">面向团队文档的检索、引用和答案审校流程，把模型输出收束进可追踪的工作流。</p>
-            <a href="https://github.com/1m01m0" aria-label="打开知识库问答工作台项目">
-              <span data-i18n="card.qa.link">查看仓库</span>
-              <i data-lucide="arrow-up-right"></i>
-            </a>
-          </article>
-
-          <article class="project-card" data-category="web" data-tilt>
-            <div class="project-topline">
-              <span class="dot dot-olive"></span>
-              <span>Frontend</span>
-            </div>
-            <h3 data-i18n="card.ds.title">设计系统实验室</h3>
-            <p data-i18n="card.ds.desc">一套轻量组件、主题变量和可访问性校验页面，用来快速验证产品界面想法。</p>
-            <a href="https://github.com/1m01m0" aria-label="打开设计系统实验室项目">
-              <span data-i18n="card.ds.link">查看仓库</span>
-              <i data-lucide="arrow-up-right"></i>
-            </a>
-          </article>
-
-          <article class="project-card" data-category="data" data-tilt>
-            <div class="project-topline">
-              <span class="dot dot-sky"></span>
-              <span>Data Product</span>
-            </div>
-            <h3 data-i18n="card.dash.title">个人指标仪表盘</h3>
-            <p data-i18n="card.dash.desc">把阅读、训练、写作和代码活动整合到一个本地优先的分析界面。</p>
-            <a href="https://github.com/1m01m0" aria-label="打开个人指标仪表盘项目">
-              <span data-i18n="card.dash.link">查看仓库</span>
-              <i data-lucide="arrow-up-right"></i>
-            </a>
-          </article>
-
-          <article class="project-card" data-category="ai" data-tilt>
-            <div class="project-topline">
-              <span class="dot dot-cactus"></span>
-              <span>Multi-Agent</span>
-            </div>
-            <h3 data-i18n="card.edict.title">三省六部制</h3>
-            <p data-i18n="card.edict.desc">基于 OpenClaw 的多智能体编排系统，9 个专业化 AI Agent 协作，配有实时仪表盘与完整审计追踪。</p>
-            <a href="https://github.com/cft0808/edict" target="_blank" rel="noopener" aria-label="打开 三省六部制 项目">
-              <span data-i18n="card.edict.link">查看仓库</span>
-              <i data-lucide="arrow-up-right"></i>
-            </a>
-          </article>
-
-          <article class="project-card" data-category="ai" data-tilt>
-            <div class="project-topline">
-              <span class="dot dot-heather"></span>
-              <span>AI Assistant</span>
-            </div>
-            <h3 data-i18n="card.openclaw.title">OpenClaw</h3>
-            <p data-i18n="card.openclaw.desc">个人 AI 助手，跨平台运行，支持多通道消息接入，本地优先的智能助理框架。</p>
-            <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener" aria-label="打开 OpenClaw 项目">
-              <span data-i18n="card.openclaw.link">查看仓库</span>
-              <i data-lucide="arrow-up-right"></i>
-            </a>
-          </article>
-        </div>
-      </section>
-
-      <section class="section notes-section" id="notes" aria-labelledby="notes-title">
-        <div class="section-heading">
-          <p class="eyebrow">Notes</p>
-          <h2 id="notes-title" data-i18n="notes.title">最近在想</h2>
+          <p class="eyebrow" data-i18n="writings.eyebrow">Writings</p>
+          <h2 id="writings-title" data-i18n="writings.title">研究笔记</h2>
         </div>
 
         <div class="note-list">
@@ -262,28 +310,6 @@
             <strong data-i18n="note.3">用小型数据产品记录长期生活，而不是追踪短期波动</strong>
             <i data-lucide="arrow-right"></i>
           </a>
-        </div>
-      </section>
-
-      <section class="section stack-section" id="stack" aria-labelledby="stack-title">
-        <div class="section-heading">
-          <p class="eyebrow">Stack</p>
-          <h2 id="stack-title" data-i18n="stack.title">工具箱</h2>
-        </div>
-
-        <div class="stack-grid">
-          <div class="stack-column">
-            <h3>Build</h3>
-            <p>TypeScript, React, Node.js, Python, SQLite</p>
-          </div>
-          <div class="stack-column">
-            <h3>Think</h3>
-            <p>LLM workflows, retrieval, evaluation, interface systems</p>
-          </div>
-          <div class="stack-column">
-            <h3>Ship</h3>
-            <p>GitHub Actions, Vercel, Docker, observability notes</p>
-          </div>
         </div>
       </section>
 
