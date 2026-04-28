@@ -729,24 +729,7 @@ button {
   width: 260px;
   height: 260px;
   display: block;
-}
-
-.globe-hint {
-  position: absolute;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--swatch-gray-450);
-  font-size: 0.75rem;
-  font-weight: 600;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 400ms;
-  white-space: nowrap;
-}
-
-.globe-card:hover .globe-hint {
-  opacity: 1;
+  touch-action: none;
 }
 
 .intro-band {
