@@ -38,6 +38,31 @@ updateScrollProgress();
 window.addEventListener("scroll", updateScrollProgress, { passive: true });
 window.addEventListener("resize", updateScrollProgress);
 
+/* Apple-style hero scroll effect */
+const heroCopy = document.querySelector(".hero-copy");
+const updateHeroScroll = () => {
+  if (!heroCopy) return;
+  const scrollY = window.scrollY;
+  const heroHeight = window.innerHeight;
+  const progress = Math.min(scrollY / heroHeight, 1);
+  const opacity = 1 - progress * 1.2;
+  const scale = 1 - progress * 0.08;
+  heroCopy.style.opacity = Math.max(opacity, 0);
+  heroCopy.style.transform = `scale(${Math.max(scale, 0.85)})`;
+};
+window.addEventListener("scroll", updateHeroScroll, { passive: true });
+
+/* Canvas parallax on scroll */
+const updateCanvasParallax = () => {
+  if (!techCanvas) return;
+  const scrollY = window.scrollY;
+  const heroHeight = window.innerHeight;
+  if (scrollY > heroHeight) return;
+  const offset = scrollY * 0.35;
+  techCanvas.style.transform = `translateY(${offset}px)`;
+};
+window.addEventListener("scroll", updateCanvasParallax, { passive: true });
+
 navToggle?.addEventListener("click", () => {
   const isOpen = nav?.classList.toggle("is-open");
   document.body.classList.toggle("nav-open", Boolean(isOpen));
@@ -224,7 +249,7 @@ const startCanvas = () => {
     techCanvas.height = Math.round(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const count = Math.max(26, Math.min(72, Math.floor(width / 22)));
+    const count = Math.max(34, Math.min(88, Math.floor(width / 17)));
     points = Array.from({ length: count }, (_, index) => ({
       x: Math.random() * width,
       y: Math.random() * height,
