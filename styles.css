@@ -813,6 +813,61 @@ h1, h2, h3, h4 {
 }
 
 /* ================================
+   SECTION DECORATIVE IMAGES
+   ================================ */
+
+.hero-avatar {
+  display: block;
+  width: 130px;
+  height: 130px;
+  margin: 0 auto var(--sp-6);
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  object-fit: cover;
+  box-shadow: var(--shadow-sm);
+}
+
+.summary-illustration {
+  float: right;
+  width: 180px;
+  height: 180px;
+  margin: 0 0 var(--sp-4) var(--sp-6);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  object-fit: cover;
+}
+
+.education-badge {
+  float: right;
+  width: 44px;
+  height: 44px;
+  margin: 0 0 var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  opacity: 0.85;
+}
+
+.skills-illustration {
+  display: block;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--sp-6);
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+.notes-illustration {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--sp-8);
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  opacity: 0.85;
+}
+
+/* ================================
    SKILLS STACK
    ================================ */
 
@@ -916,7 +971,7 @@ h1, h2, h3, h4 {
   display: flex;
   min-height: 320px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface);
@@ -958,6 +1013,7 @@ h1, h2, h3, h4 {
 .dot-sky { background: var(--swatch-sky); }
 .dot-cactus { background: var(--swatch-cactus); }
 .dot-heather { background: var(--swatch-heather); }
+.dot-oat { background: var(--swatch-oat); }
 
 .project-card h3 {
   margin: var(--sp-8) 0 0;
@@ -975,6 +1031,7 @@ h1, h2, h3, h4 {
 }
 
 .project-card a {
+  margin-top: auto;
   display: inline-flex;
   width: fit-content;
   align-items: center;
