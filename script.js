@@ -35,8 +35,6 @@ const updateScrollProgress = () => {
 };
 
 updateScrollProgress();
-window.addEventListener("scroll", updateScrollProgress, { passive: true });
-window.addEventListener("resize", updateScrollProgress);
 
 /* Apple-style hero scroll effect */
 const heroCopy = document.querySelector(".hero-copy");
@@ -50,7 +48,6 @@ const updateHeroScroll = () => {
   heroCopy.style.opacity = Math.max(opacity, 0);
   heroCopy.style.transform = `scale(${Math.max(scale, 0.85)})`;
 };
-window.addEventListener("scroll", updateHeroScroll, { passive: true });
 
 /* Canvas parallax on scroll */
 const updateCanvasParallax = () => {
@@ -61,7 +58,22 @@ const updateCanvasParallax = () => {
   const offset = scrollY * 0.35;
   techCanvas.style.transform = `translateY(${offset}px)`;
 };
-window.addEventListener("scroll", updateCanvasParallax, { passive: true });
+
+/* Merged scroll handler with rAF throttling */
+let scrollTicking = false;
+const onScroll = () => {
+  if (!scrollTicking) {
+    requestAnimationFrame(() => {
+      updateScrollProgress();
+      updateHeroScroll();
+      updateCanvasParallax();
+      scrollTicking = false;
+    });
+    scrollTicking = true;
+  }
+};
+window.addEventListener("scroll", onScroll, { passive: true });
+window.addEventListener("resize", updateScrollProgress);
 
 navToggle?.addEventListener("click", () => {
   const isOpen = nav?.classList.toggle("is-open");
@@ -193,7 +205,7 @@ tiltItems.forEach((item) => {
     item.classList.add("is-tilting");
     item.style.setProperty("--tilt-x", `${(-y * 7).toFixed(2)}deg`);
     item.style.setProperty("--tilt-y", `${(x * 9).toFixed(2)}deg`);
-  });
+  }, { passive: true });
 
   item.addEventListener("pointerleave", () => {
     item.classList.remove("is-tilting");
@@ -212,7 +224,7 @@ magneticItems.forEach((item) => {
 
     item.style.setProperty("--magnet-x", `${x.toFixed(2)}px`);
     item.style.setProperty("--magnet-y", `${y.toFixed(2)}px`);
-  });
+  }, { passive: true });
 
   item.addEventListener("pointerleave", () => {
     item.style.setProperty("--magnet-x", "0px");
@@ -331,7 +343,27 @@ const startCanvas = () => {
   };
 
   resize();
-  draw();
+
+  let canvasVisible = true;
+  const drawLoop = () => {
+    if (!canvasVisible) return;
+    draw();
+  };
+  drawLoop();
+
+  if ("IntersectionObserver" in window) {
+    const canvasObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const wasVisible = canvasVisible;
+          canvasVisible = entry.isIntersecting;
+          if (!wasVisible && canvasVisible) drawLoop();
+        });
+      },
+      { threshold: 0 }
+    );
+    canvasObserver.observe(hero);
+  }
 
   window.addEventListener("pagehide", () => cancelAnimationFrame(frame));
 };
@@ -963,6 +995,19 @@ langMenuEl?.addEventListener("click", (e) => {
   if (lang) applyLang(lang);
   langPicker?.classList.remove("is-open");
   langBtn?.setAttribute("aria-expanded", "false");
+
+  // 关闭移动端导航菜单
+  if (nav?.classList.contains("is-open")) {
+    nav.classList.remove("is-open");
+    document.body.classList.remove("nav-open");
+    navToggle?.setAttribute("aria-expanded", "false");
+    if (navToggle) {
+      navToggle.innerHTML = '<i data-lucide="menu"></i>';
+    }
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
 });
 
 document.addEventListener("click", (e) => {
