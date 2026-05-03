@@ -985,7 +985,7 @@ h1, h2, h3, h4 {
 .project-card:hover {
   border-color: var(--line-strong);
   box-shadow: var(--shadow-xl);
-  transform: scale(1.02);
+  --lift: -4px;
 }
 
 .project-card.is-hidden {
@@ -1075,7 +1075,7 @@ h1, h2, h3, h4 {
 .toy-card:hover {
   border-color: var(--line-strong);
   box-shadow: var(--shadow-xl);
-  transform: scale(1.02);
+  --lift: -4px;
 }
 
 .toy-card h3 {
