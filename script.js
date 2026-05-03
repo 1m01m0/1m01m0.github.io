@@ -13,7 +13,7 @@ const liveValues = document.querySelectorAll("[data-live]");
 const tiltItems = document.querySelectorAll("[data-tilt]");
 const magneticItems = document.querySelectorAll(".button");
 const revealItems = document.querySelectorAll(
-  ".section-heading, .filter-bar, .project-card, .note-item, .stack-column, .education-card, .contact-section > *, .site-footer"
+  ".section-heading, .filter-bar, .project-card, .toy-card, .note-item, .stack-column, .education-card, .contact-section > *, .site-footer"
 );
 const countItems = document.querySelectorAll("[data-count]");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -512,6 +512,14 @@ const translations = {
     "contact.copy": "复制邮箱",
     "contact.copied": "已复制",
     "footer.palette": "coding by emo",
+    "nav.toy": "MY_TOY",
+    "toy.eyebrow": "MY_TOY",
+    "toy.title": "我的作品",
+    "toy.claude.title": "Claude Desktop 中文汉化",
+    "toy.claude.desc": "为 macOS 版 Claude Desktop 提供完整简体中文汉化，包括界面翻译、语言白名单修补和硬编码文案替换，并注入中文字体切换运行时。",
+    "toy.converter.title": "格式转换工具集",
+    "toy.converter.desc": "适用于 Claude Code / Claude Cowork / OpenCode / Codex 的格式转换 Skill 集合。支持图片和文档格式互转。",
+    "toy.link": "查看仓库",
     "aria.brand": "回到首页"
   },
   en: {
@@ -574,6 +582,14 @@ const translations = {
     "contact.copy": "Copy Email",
     "contact.copied": "Copied",
     "footer.palette": "coding by emo",
+    "nav.toy": "MY_TOY",
+    "toy.eyebrow": "MY_TOY",
+    "toy.title": "My Works",
+    "toy.claude.title": "Claude Desktop Chinese Localization",
+    "toy.claude.desc": "Complete Simplified Chinese localization for macOS Claude Desktop, including UI translation, language allowlist patching, hardcoded text replacement, and Chinese font switching runtime injection.",
+    "toy.converter.title": "Format Converter Skills",
+    "toy.converter.desc": "Format conversion Skill collection for Claude Code / Claude Cowork / OpenCode / Codex. Supports image and document format interconversion.",
+    "toy.link": "View Repository",
     "aria.brand": "Back to top"
   },
   ko: {
@@ -636,6 +652,14 @@ const translations = {
     "contact.copy": "이메일 복사",
     "contact.copied": "복사됨",
     "footer.palette": "coding by emo",
+    "nav.toy": "MY_TOY",
+    "toy.eyebrow": "MY_TOY",
+    "toy.title": "내 작품",
+    "toy.claude.title": "Claude Desktop 중국어 현지화",
+    "toy.claude.desc": "macOS Claude Desktop을 위한 완전한 간체 중국어 현지화. UI 번역, 언어 화이트리스트 패치, 하드코딩된 텍스트 교체, 중국어 글꼴 전환 런타임 주입을 포함합니다.",
+    "toy.converter.title": "포맷 변환 스킬",
+    "toy.converter.desc": "Claude Code / Claude Cowork / OpenCode / Codex용 포맷 변환 Skill 모음. 이미지 및 문서 포맷 상호 변환을 지원합니다.",
+    "toy.link": "저장소 보기",
     "aria.brand": "맨 위로"
   },
   ja: {
@@ -698,6 +722,14 @@ const translations = {
     "contact.copy": "メールをコピー",
     "contact.copied": "コピーしました",
     "footer.palette": "coding by emo",
+    "nav.toy": "MY_TOY",
+    "toy.eyebrow": "MY_TOY",
+    "toy.title": "作品",
+    "toy.claude.title": "Claude Desktop 中国語ローカライズ",
+    "toy.claude.desc": "macOS Claude Desktop 用の完全な簡体字中国語ローカライズ。UI翻訳、言語ホワイトリストパッチ、ハードコードされたテキスト置換、中国語フォント切り替えランタイム注入を含みます。",
+    "toy.converter.title": "フォーマット変換スキル",
+    "toy.converter.desc": "Claude Code / Claude Cowork / OpenCode / Codex 向けフォーマット変換 Skill コレクション。画像およびドキュメントのフォーマット相互変換をサポート。",
+    "toy.link": "リポジトリを見る",
     "aria.brand": "トップへ戻る"
   },
   de: {
@@ -760,6 +792,14 @@ const translations = {
     "contact.copy": "E-Mail kopieren",
     "contact.copied": "Kopiert",
     "footer.palette": "coding by emo",
+    "nav.toy": "MY_TOY",
+    "toy.eyebrow": "MY_TOY",
+    "toy.title": "Meine Werke",
+    "toy.claude.title": "Claude Desktop Chinesische Lokalisierung",
+    "toy.claude.desc": "Vollständige Vereinfachte-Chinesisch-Lokalisierung für macOS Claude Desktop, inkl. UI-Übersetzung, Sprach-Allowlist-Patch, hartcodierte Textersetzung und Chinesische Schriftart-Switching-Runtime-Injektion.",
+    "toy.converter.title": "Format-Konverter Skills",
+    "toy.converter.desc": "Format-Konvertierungs-Skill-Sammlung für Claude Code / Claude Cowork / OpenCode / Codex. Unterstützt Bild- und Dokumentformat-Konvertierung.",
+    "toy.link": "Repository ansehen",
     "aria.brand": "Zurück zum Anfang"
   },
   es: {
@@ -822,6 +862,14 @@ const translations = {
     "contact.copy": "Copiar correo",
     "contact.copied": "Copiado",
     "footer.palette": "coding by emo",
+    "nav.toy": "MY_TOY",
+    "toy.eyebrow": "MY_TOY",
+    "toy.title": "Mis Obras",
+    "toy.claude.title": "Localización China de Claude Desktop",
+    "toy.claude.desc": "Localización completa en chino simplificado para macOS Claude Desktop, incluyendo traducción de UI, parche de lista blanca de idiomas, reemplazo de texto codificado e inyección de runtime de cambio de fuente china.",
+    "toy.converter.title": "Skills de Conversión de Formato",
+    "toy.converter.desc": "Colección de Skills de conversión de formato para Claude Code / Claude Cowork / OpenCode / Codex. Soporta conversión mutua de formatos de imagen y documento.",
+    "toy.link": "Ver Repositorio",
     "aria.brand": "Volver arriba"
   },
   fr: {
@@ -884,6 +932,14 @@ const translations = {
     "contact.copy": "Copier l'e-mail",
     "contact.copied": "Copié",
     "footer.palette": "coding by emo",
+    "nav.toy": "MY_TOY",
+    "toy.eyebrow": "MY_TOY",
+    "toy.title": "Mes Œuvres",
+    "toy.claude.title": "Localisation Chinoise de Claude Desktop",
+    "toy.claude.desc": "Localisation complète en chinois simplifié pour macOS Claude Desktop, incluant la traduction de l'UI, le patch de la liste blanche des langues, le remplacement de texte codé en dur et l'injection du runtime de changement de police chinoise.",
+    "toy.converter.title": "Skills de Conversion de Format",
+    "toy.converter.desc": "Collection de Skills de conversion de format pour Claude Code / Claude Cowork / OpenCode / Codex. Prend en charge la conversion mutuelle des formats image et document.",
+    "toy.link": "Voir le Dépôt",
     "aria.brand": "Retour en haut"
   },
   "zh-TW": {
@@ -946,6 +1002,14 @@ const translations = {
     "contact.copy": "複製信箱",
     "contact.copied": "已複製",
     "footer.palette": "coding by emo",
+    "nav.toy": "MY_TOY",
+    "toy.eyebrow": "MY_TOY",
+    "toy.title": "我的作品",
+    "toy.claude.title": "Claude Desktop 中文漢化",
+    "toy.claude.desc": "為 macOS 版 Claude Desktop 提供完整簡體中文漢化，包括介面翻譯、語言白名單修補和硬編碼文案替換，並注入中文字體切換運行時。",
+    "toy.converter.title": "格式轉換工具集",
+    "toy.converter.desc": "適用於 Claude Code / Claude Cowork / OpenCode / Codex 的格式轉換 Skill 集合。支援圖片和文件格式互轉。",
+    "toy.link": "查看倉庫",
     "aria.brand": "回到首頁"
   }
 };

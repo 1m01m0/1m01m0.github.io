@@ -1048,6 +1048,86 @@ h1, h2, h3, h4 {
 }
 
 /* ================================
+   MY TOY
+   ================================ */
+
+.toy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+}
+
+.toy-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  overflow: hidden;
+  padding: var(--sp-6);
+  transition:
+    border-color var(--duration-base) ease,
+    box-shadow var(--duration-base) ease;
+}
+
+.toy-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-xl);
+  transform: scale(1.02);
+}
+
+.toy-card h3 {
+  margin: var(--sp-8) 0 0;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.18;
+}
+
+.toy-card p {
+  margin: var(--sp-3) 0 0;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.toy-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+.toy-tags span {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-full);
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+}
+
+.toy-card a {
+  margin-top: auto;
+  padding-top: var(--sp-5);
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  font-weight: 650;
+  font-size: 0.9375rem;
+  transition: color var(--duration-fast) ease, gap var(--duration-fast) ease;
+}
+
+.toy-card a:hover {
+  color: var(--accent);
+  gap: 10px;
+}
+
+/* ================================
    LAB SECTION
    ================================ */
 
@@ -1617,6 +1697,10 @@ h1, h2, h3, h4 {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .toy-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .stack-grid {
     grid-template-columns: 1fr;
   }
@@ -1755,6 +1839,10 @@ h1, h2, h3, h4 {
   }
 
   .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toy-grid {
     grid-template-columns: 1fr;
   }
 
