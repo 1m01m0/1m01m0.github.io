@@ -240,12 +240,12 @@ const startCanvas = () => {
 
   const styles = getComputedStyle(root);
   const colors = [
-    styles.getPropertyValue("--swatch-clay").trim(),
-    styles.getPropertyValue("--swatch-olive").trim(),
-    styles.getPropertyValue("--swatch-sky").trim(),
-    styles.getPropertyValue("--swatch-fig").trim()
+    styles.getPropertyValue("--md-sys-color-tertiary").trim(),
+    styles.getPropertyValue("--md-sys-color-secondary").trim(),
+    styles.getPropertyValue("--md-sys-color-primary").trim(),
+    styles.getPropertyValue("--md-sys-color-tertiary-60").trim()
   ];
-  const lineColor = styles.getPropertyValue("--swatch-gray-500").trim();
+  const lineColor = styles.getPropertyValue("--md-sys-color-outline").trim();
   const pointer = { x: 0, y: 0, active: false };
   let points = [];
   let width = 0;
@@ -1143,13 +1143,13 @@ document.addEventListener("keydown", (e) => {
     directionalLight.position.set(5, 3, 5);
     scene.add(directionalLight);
 
-    var fillLight = new THREE.DirectionalLight(0x8899cc, 0.6);
+    var fillLight = new THREE.DirectionalLight(0x7c4dff, 0.45);
     fillLight.position.set(-3, -1, -3);
     scene.add(fillLight);
 
     var atmosphereGeom = new THREE.SphereGeometry(1.33, 64, 64);
     var atmosphereMat = new THREE.MeshPhongMaterial({
-      color: 0x4a90d9,
+      color: 0x7c4dff,
       transparent: true,
       opacity: 0.07,
       side: THREE.FrontSide
