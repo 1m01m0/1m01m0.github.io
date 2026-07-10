@@ -7,3 +7,5 @@
 .DS_Store
 .claude/launch.json
 .idea/1m01m0.github.io.iml
+.private/
+/index.html.tmp

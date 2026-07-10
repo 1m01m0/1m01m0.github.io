@@ -29,6 +29,7 @@ emo 的个人主页 — 零构建、零框架的纯静态网站。支持 8 种�
 
 | 功能 | 说明 |
 |------|------|
+| 密码加密门禁 | PBKDF2-SHA-256 派生密钥，AES-256-GCM 加密正文与原交互脚本；正确密码验证后才在浏览器内解密 |
 | 8 语言 i18n | 简体中文 / English / 한국어 / 日本語 / Deutsch / Español / Français / 繁體中文，语言偏好自动持久化到 `localStorage` |
 | Canvas 粒子网络 | 首屏动态节点连线，响应鼠标位置（`data-tech-canvas`） |
 | 3D 地球 | Three.js 驱动的小地球，可拖拽旋转（`data-globe-canvas`） |
@@ -46,19 +47,22 @@ emo 的个人主页 — 零构建、零框架的纯静态网站。支持 8 种�
 |------|------|
 | 页面 | HTML5 语义标签，单文件 |
 | 样式 | CSS Custom Properties（Claude swatch 变量体系） |
-| 交互 | 原生 JS，`data-*` 属性驱动，零第三方运行时依赖 |
-| 图标 | [Lucide](https://lucide.dev/)（CDN 按需加载） |
-| 3D | [Three.js](https://threejs.org/) r160（CDN，仅地球组件使用） |
-| 字体 | Inter + 系统后备字体栈 |
+| 交互 | 原生 JS，`data-*` 属性驱动，无框架 |
+| 图标 | [Lucide](https://lucide.dev/) 0.321.0（固定版本，本地托管） |
+| 3D | [Three.js](https://threejs.org/) r160（固定版本，本地托管） |
+| 字体 | Plus Jakarta Sans + 系统后备字体栈 |
 | 部署 | GitHub Pages + CNAME 自定义域名 |
 
 ### 目录结构
 
 ```
 .
-├── index.html          # 单页应用，所有 section 内联
-├── styles.css          # 全局样式 + CSS 变量调色板
-├── script.js           # 交互逻辑 + 8 语言翻译表
+├── index.html          # 密码门禁 + 内联加密内容包
+├── styles.css          # 全局样式 + 门禁样式 + CSS 变量调色板
+├── script.js           # 密钥派生、解密与受保护应用启动器
+├── tools/
+│   ├── gate-template.html   # 公开门禁模板
+│   └── password-gate.mjs    # 解包、重新加密、换密工具
 ├── CNAME               # 自定义域名
 ├── README.md
 └── assets/
@@ -70,16 +74,45 @@ emo 的个人主页 — 零构建、零框架的纯静态网站。支持 8 种�
 
 ```bash
 python3 -m http.server 8080
-# 或用浏览器直接打开 index.html
 ```
+
+建议通过本地 HTTP 服务预览；部分浏览器不会在 `file://` 页面开放 Web Crypto。
+
+### 维护加密内容
+
+密码不应直接写进命令或仓库。先通过隐藏输入导出环境变量，再解包：
+
+```bash
+read -s SITE_PASSWORD
+export SITE_PASSWORD
+node tools/password-gate.mjs unpack
+```
+
+修改 `.private/index.html` 和 `.private/script.js` 后重新加密；成功后工具会自动删除明文 `.private/`：
+
+```bash
+node tools/password-gate.mjs pack
+unset SITE_PASSWORD
+```
+
+换成新的随机密码：
+
+```bash
+read -s SITE_PASSWORD
+export SITE_PASSWORD
+node tools/password-gate.mjs rotate --generate-password
+unset SITE_PASSWORD
+```
+
+不要启动服务器暴露 `.private/`，也不要提交该目录。
 
 ### 自定义指南
 
 | 你想改 | 文件 | 做法 |
 |--------|------|------|
-| 名字、简介、链接、邮箱 | `index.html` | 修改 hero、section、footer 区域的文本 |
+| 名字、简介、链接、邮箱 | `.private/index.html` | 先解包，再修改 hero、section、footer 区域的文本 |
 | 颜色主题 | `styles.css` `:root` 块 | 调整 `--swatch-*` 变量（见下方色板） |
-| 翻译文本 | `script.js` `translations` 对象 | 修改或新增语言版本的翻译字符串 |
+| 翻译文本 | `.private/script.js` `translations` 对象 | 先解包，再修改或新增语言版本的翻译字符串 |
 
 所有交互效果由 `data-*` HTML 属性控制（`data-tilt`、`data-filter`、`data-count` 等），新增元素只需复制对应属性即可获得相同效果。
 
@@ -128,7 +161,7 @@ python3 -m http.server 8080
 - 配色灵感来自 [Claude](https://claude.com) 的公开 CSS
 - 图标由 [Lucide](https://lucide.dev) 提供
 - 3D 渲染由 [Three.js](https://threejs.org) 提供
-- 字体由 [Inter](https://rsms.me/inter/) 提供
+- 字体由 [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans) 提供
 
 ---
 
@@ -142,6 +175,7 @@ emo's personal homepage — a zero-build, zero-framework static site. Eight-lang
 
 | Feature | Description |
 |---------|-------------|
+| Encrypted password gate | Derives a key with PBKDF2-SHA-256 and decrypts the AES-256-GCM protected markup and app script only after a valid password |
 | 8-language i18n | 简体中文 / English / 한국어 / 日本語 / Deutsch / Español / Français / 繁體中文, with persistent language preference in `localStorage` |
 | Canvas particle network | Dynamic node connections in the hero area, responding to mouse position (`data-tech-canvas`) |
 | 3D globe | Three.js-powered globe with drag-to-rotate (`data-globe-canvas`) |
@@ -159,19 +193,22 @@ emo's personal homepage — a zero-build, zero-framework static site. Eight-lang
 |-------|---------|
 | Markup | HTML5 semantic elements, single file |
 | Styling | CSS Custom Properties (Claude swatch variable system) |
-| Scripting | Vanilla JS, `data-*` attribute-driven, zero third-party runtime dependencies |
-| Icons | [Lucide](https://lucide.dev/) (lazy-loaded via CDN) |
-| 3D | [Three.js](https://threejs.org/) r160 (CDN, used only for the globe) |
-| Typography | Inter + system fallback font stack |
+| Scripting | Vanilla JS, `data-*` attribute-driven, no framework |
+| Icons | [Lucide](https://lucide.dev/) 0.321.0 (pinned and self-hosted) |
+| 3D | [Three.js](https://threejs.org/) r160 (pinned and self-hosted) |
+| Typography | Plus Jakarta Sans + system fallback font stack |
 | Deployment | GitHub Pages with CNAME custom domain |
 
 ### Directory Structure
 
 ```
 .
-├── index.html          # Single-page app, all sections inline
-├── styles.css          # Global styles + CSS variable palette
-├── script.js           # Interaction logic + 8-language translation table
+├── index.html          # Password gate + inline encrypted content bundle
+├── styles.css          # Global and gate styles + CSS variable palette
+├── script.js           # Key derivation, decryption, and protected-app bootstrap
+├── tools/
+│   ├── gate-template.html   # Public gate template
+│   └── password-gate.mjs    # Unpack, repack, and password-rotation utility
 ├── CNAME               # Custom domain
 ├── README.md
 └── assets/
@@ -183,16 +220,36 @@ emo's personal homepage — a zero-build, zero-framework static site. Eight-lang
 
 ```bash
 python3 -m http.server 8080
-# Or open index.html directly in a browser
 ```
+
+Preview through local HTTP. Some browsers do not expose Web Crypto to `file://` pages.
+
+### Maintaining Protected Content
+
+Never put a password directly in a command or tracked file. Export it from a hidden prompt, then unpack:
+
+```bash
+read -s SITE_PASSWORD
+export SITE_PASSWORD
+node tools/password-gate.mjs unpack
+```
+
+Edit `.private/index.html` and `.private/script.js`, then repack. A successful pack removes the plaintext `.private/` directory:
+
+```bash
+node tools/password-gate.mjs pack
+unset SITE_PASSWORD
+```
+
+Do not serve, deploy, or commit `.private/`.
 
 ### Customization Guide
 
 | What to change | File | How |
 |----------------|------|-----|
-| Name, bio, links, email | `index.html` | Edit text content in the hero, section, and footer areas |
+| Name, bio, links, email | `.private/index.html` | Unpack first, then edit the hero, section, and footer content |
 | Color theme | `styles.css` `:root` block | Adjust `--swatch-*` variables (see palette below) |
-| Translation strings | `script.js` `translations` object | Add or modify translation entries for any locale |
+| Translation strings | `.private/script.js` `translations` object | Unpack first, then add or modify locale entries |
 
 All interactive effects are controlled by `data-*` HTML attributes (`data-tilt`, `data-filter`, `data-count`, etc.). Copy the corresponding attributes to new elements to get the same effects.
 
@@ -241,7 +298,7 @@ Palette derived from the public CSS of the [Claude](https://claude.com/product/o
 - Color palette inspired by [Claude](https://claude.com)'s public CSS
 - Icons by [Lucide](https://lucide.dev)
 - 3D rendering by [Three.js](https://threejs.org)
-- Typography by [Inter](https://rsms.me/inter/)
+- Typography by [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans)
 
 ---
 
@@ -255,6 +312,7 @@ emo의 개인 홈페이지 — 빌드 도구나 프레임워크 없이 순수한
 
 | 기능 | 설명 |
 |------|------|
+| 암호화 비밀번호 게이트 | PBKDF2-SHA-256으로 키를 파생하고 올바른 비밀번호 입력 후에만 AES-256-GCM 보호 콘텐츠를 복호화 |
 | 8개 언어 i18n | 简体中文 / English / 한국어 / 日本語 / Deutsch / Español / Français / 繁體中文, `localStorage`에 언어 설정 유지 |
 | Canvas 파티클 네트워크 | 마우스 움직임에 반응하는 동적 노드 연결 (`data-tech-canvas`) |
 | 3D 지구본 | Three.js 기반, 드래그로 회전 가능 (`data-globe-canvas`) |
@@ -272,19 +330,20 @@ emo의 개인 홈페이지 — 빌드 도구나 프레임워크 없이 순수한
 |------|------|
 | 마크업 | HTML5 시맨틱 요소, 단일 파일 |
 | 스타일 | CSS Custom Properties (Claude swatch 변수 체계) |
-| 스크립트 | Vanilla JS, `data-*` 속성 기반, 서드파티 런타임 종속성 없음 |
-| 아이콘 | [Lucide](https://lucide.dev/) (CDN 지연 로딩) |
-| 3D | [Three.js](https://threejs.org/) r160 (CDN, 지구본에만 사용) |
-| 타이포그래피 | Inter + 시스템 대체 폰트 |
+| 스크립트 | Vanilla JS, `data-*` 속성 기반, 프레임워크 없음 |
+| 아이콘 | [Lucide](https://lucide.dev/) 0.321.0 (고정 버전, 로컬 호스팅) |
+| 3D | [Three.js](https://threejs.org/) r160 (고정 버전, 로컬 호스팅) |
+| 타이포그래피 | Plus Jakarta Sans + 시스템 대체 폰트 |
 | 배포 | GitHub Pages + CNAME 커스텀 도메인 |
 
 ### 디렉토리 구조
 
 ```
 .
-├── index.html          # 단일 페이지, 모든 섹션 내장
-├── styles.css          # 전역 스타일 + CSS 변수 팔레트
-├── script.js           # 인터랙션 로직 + 8개 언어 번역 테이블
+├── index.html          # 비밀번호 게이트 + 인라인 암호화 콘텐츠
+├── styles.css          # 전역/게이트 스타일 + CSS 변수 팔레트
+├── script.js           # 키 파생, 복호화 및 보호 앱 부트스트랩
+├── tools/              # 콘텐츠 해제, 재암호화 및 비밀번호 변경 도구
 ├── CNAME               # 커스텀 도메인
 ├── README.md
 └── assets/
@@ -296,16 +355,17 @@ emo의 개인 홈페이지 — 빌드 도구나 프레임워크 없이 순수한
 
 ```bash
 python3 -m http.server 8080
-# 또는 브라우저에서 index.html 직접 열기
 ```
+
+Web Crypto 호환성을 위해 로컬 HTTP 서버로 미리보기를 권장합니다. 콘텐츠를 수정하려면 `SITE_PASSWORD`를 숨김 입력으로 내보낸 뒤 `node tools/password-gate.mjs unpack`을 실행하고, 수정 후 `node tools/password-gate.mjs pack`을 실행하세요. `.private/`는 제공하거나 커밋하지 마세요.
 
 ### 커스터마이징 가이드
 
 | 변경할 항목 | 파일 | 방법 |
 |-------------|------|------|
-| 이름, 소개, 링크, 이메일 | `index.html` | hero, section, footer 영역의 텍스트 수정 |
+| 이름, 소개, 링크, 이메일 | `.private/index.html` | 먼저 해제한 뒤 hero, section, footer 영역 수정 |
 | 컬러 테마 | `styles.css` `:root` 블록 | `--swatch-*` 변수 조정 (아래 팔레트 참조) |
-| 번역 문자열 | `script.js` `translations` 객체 | 원하는 언어의 번역 항목 추가/수정 |
+| 번역 문자열 | `.private/script.js` `translations` 객체 | 먼저 해제한 뒤 번역 항목 추가/수정 |
 
 모든 인터랙션 효과는 `data-*` HTML 속성(`data-tilt`, `data-filter`, `data-count` 등)으로 제어됩니다. 새 요소에 해당 속성을 복사하면 동일한 효과를 적용할 수 있습니다.
 
@@ -354,7 +414,7 @@ python3 -m http.server 8080
 - 컬러 팔레트는 [Claude](https://claude.com)의 공개 CSS에서 영감을 받았습니다
 - 아이콘: [Lucide](https://lucide.dev)
 - 3D 렌더링: [Three.js](https://threejs.org)
-- 타이포그래피: [Inter](https://rsms.me/inter/)
+- 타이포그래피: [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans)
 
 ---
 
@@ -368,6 +428,7 @@ emo の個人ホームページ — ビルドツールやフレームワーク�
 
 | 機能 | 説明 |
 |------|------|
+| 暗号化パスワードゲート | PBKDF2-SHA-256 で鍵を導出し、正しいパスワード入力後のみ AES-256-GCM 保護コンテンツを復号 |
 | 8 言語 i18n | 简体中文 / English / 한국어 / 日本語 / Deutsch / Español / Français / 繁體中文、言語設定は `localStorage` に保持 |
 | Canvas パーティクルネットワーク | マウスの動きに反応する動的ノード接続 (`data-tech-canvas`) |
 | 3D 地球儀 | Three.js 製、ドラッグで回転可能 (`data-globe-canvas`) |
@@ -385,19 +446,20 @@ emo の個人ホームページ — ビルドツールやフレームワーク�
 |------|------|
 | マークアップ | HTML5 セマンティック要素、単一ファイル |
 | スタイル | CSS Custom Properties (Claude swatch 変数体系) |
-| スクリプト | Vanilla JS、`data-*` 属性駆動、サードパーティランタイム依存なし |
-| アイコン | [Lucide](https://lucide.dev/) (CDN 経由の遅延ロード) |
-| 3D | [Three.js](https://threejs.org/) r160 (CDN、地球儀のみに使用) |
-| タイポグラフィ | Inter + システムフォールバックフォント |
+| スクリプト | Vanilla JS、`data-*` 属性駆動、フレームワークなし |
+| アイコン | [Lucide](https://lucide.dev/) 0.321.0 (固定版、ローカル配信) |
+| 3D | [Three.js](https://threejs.org/) r160 (固定版、ローカル配信) |
+| タイポグラフィ | Plus Jakarta Sans + システムフォールバックフォント |
 | デプロイ | GitHub Pages + CNAME カスタムドメイン |
 
 ### ディレクトリ構成
 
 ```
 .
-├── index.html          # 単一ページ、全セクションを内包
-├── styles.css          # グローバルスタイル + CSS 変数パレット
-├── script.js           # インタラクションロジック + 8 言語翻訳テーブル
+├── index.html          # パスワードゲート + インライン暗号化コンテンツ
+├── styles.css          # グローバル/ゲートスタイル + CSS 変数パレット
+├── script.js           # 鍵導出、復号、保護アプリの起動処理
+├── tools/              # 展開、再暗号化、パスワード変更ツール
 ├── CNAME               # カスタムドメイン
 ├── README.md
 └── assets/
@@ -409,16 +471,17 @@ emo の個人ホームページ — ビルドツールやフレームワーク�
 
 ```bash
 python3 -m http.server 8080
-# またはブラウザで index.html を直接開く
 ```
+
+Web Crypto 互換性のため、ローカル HTTP サーバーでの確認を推奨します。編集時は非表示入力で `SITE_PASSWORD` をエクスポートし、`node tools/password-gate.mjs unpack` を実行してください。編集後は `node tools/password-gate.mjs pack` を実行し、`.private/` を公開・コミットしないでください。
 
 ### カスタマイズガイド
 
 | 変更したい項目 | ファイル | 方法 |
 |----------------|----------|------|
-| 名前、自己紹介、リンク、メール | `index.html` | hero、section、footer 領域のテキストを編集 |
+| 名前、自己紹介、リンク、メール | `.private/index.html` | 展開後に hero、section、footer 領域を編集 |
 | カラーテーマ | `styles.css` `:root` ブロック | `--swatch-*` 変数を調整 (下記パレット参照) |
-| 翻訳文字列 | `script.js` `translations` オブジェクト | 任意の言語の翻訳エントリを追加・修正 |
+| 翻訳文字列 | `.private/script.js` `translations` オブジェクト | 展開後に翻訳エントリを追加・修正 |
 
 すべてのインタラクション効果は `data-*` HTML 属性 (`data-tilt`、`data-filter`、`data-count` など) によって制御されます。新しい要素に対応する属性をコピーするだけで同じ効果が得られます。
 
@@ -467,4 +530,4 @@ python3 -m http.server 8080
 - カラーパレットは [Claude](https://claude.com) の公開 CSS から着想を得ました
 - アイコン: [Lucide](https://lucide.dev)
 - 3D レンダリング: [Three.js](https://threejs.org)
-- タイポグラフィ: [Inter](https://rsms.me/inter/)
+- タイポグラフィ: [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans)

@@ -116,7 +116,7 @@ html {
 
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 0;
   background: var(--page);
   color: var(--ink);
   font-family: var(--font-sans);
@@ -170,6 +170,336 @@ button {
 ::selection {
   background: var(--accent-soft);
   color: var(--ink);
+}
+
+/* ================================
+   PASSWORD GATE
+   ================================ */
+
+html.is-gated,
+html.is-gated body {
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.access-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  min-width: 0;
+  min-height: 100svh;
+  place-items: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: max(var(--sp-6), env(safe-area-inset-top)) max(var(--sp-4), env(safe-area-inset-right))
+    max(var(--sp-6), env(safe-area-inset-bottom)) max(var(--sp-4), env(safe-area-inset-left));
+  background: var(--page);
+  isolation: isolate;
+}
+
+.access-gate::before,
+.access-gate::after {
+  position: fixed;
+  z-index: -1;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.access-gate::before {
+  top: clamp(-160px, -12vw, -80px);
+  right: clamp(-140px, -8vw, -48px);
+  width: clamp(240px, 34vw, 560px);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--swatch-clay) 26%, transparent);
+  box-shadow:
+    0 0 0 clamp(32px, 4vw, 76px) color-mix(in srgb, var(--swatch-coral) 16%, transparent),
+    0 0 0 clamp(72px, 9vw, 156px) color-mix(in srgb, var(--swatch-oat) 13%, transparent);
+}
+
+.access-gate::after {
+  bottom: clamp(-170px, -14vw, -92px);
+  left: clamp(-120px, -7vw, -44px);
+  width: clamp(220px, 29vw, 480px);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--swatch-olive) 18%, transparent);
+  box-shadow: 0 0 0 clamp(42px, 6vw, 96px) color-mix(in srgb, var(--swatch-cactus) 13%, transparent);
+}
+
+.access-gate__shell {
+  width: min(100%, 440px);
+  margin: auto;
+  animation: access-gate-in 520ms var(--ease-out) both;
+}
+
+.access-gate__identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: var(--sp-5);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+}
+
+.access-gate__mark {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.access-gate__badge {
+  margin-left: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-full);
+  padding: 3px 8px;
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+}
+
+.access-gate__panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  background: color-mix(in srgb, var(--surface-raised) 94%, transparent);
+  padding: clamp(var(--sp-6), 7vw, var(--sp-10));
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+.access-gate__eyebrow {
+  margin: 0 0 var(--sp-3);
+  color: var(--accent-hover);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.access-gate h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.access-gate__lede {
+  margin: var(--sp-4) 0 0;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.access-form {
+  display: grid;
+  margin-top: var(--sp-8);
+}
+
+.access-form label {
+  margin-bottom: var(--sp-2);
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+  font-weight: 650;
+}
+
+.access-form__field {
+  position: relative;
+}
+
+.access-form input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  outline: 0;
+  background: var(--page-dim);
+  color: var(--ink);
+  font: 500 1rem/1 var(--font-sans);
+  letter-spacing: 0.04em;
+  padding: 0 74px 0 var(--sp-4);
+  transition:
+    border-color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease,
+    background var(--duration-fast) ease;
+}
+
+.access-form input:hover {
+  border-color: var(--swatch-gray-400);
+}
+
+.access-form input:focus-visible {
+  border-color: var(--accent);
+  background: var(--surface-raised);
+  box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.access-form input[aria-invalid="true"] {
+  border-color: var(--swatch-fig);
+  box-shadow: 0 0 0 3px rgba(196, 102, 134, 0.16);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--swatch-fig) 16%, transparent);
+}
+
+.access-form__reveal {
+  position: absolute;
+  top: 50%;
+  right: var(--sp-2);
+  min-width: 56px;
+  min-height: 36px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  transform: translateY(-50%);
+  transition: color var(--duration-fast) ease, background var(--duration-fast) ease;
+}
+
+.access-form__reveal:hover,
+.access-form__reveal:focus-visible {
+  outline: 0;
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+.access-form__status {
+  min-height: 24px;
+  margin: var(--sp-2) 0;
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.access-form__status.is-error {
+  color: var(--swatch-fig);
+}
+
+.access-form__submit {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--swatch-gray-1000);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+  transition:
+    background var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease,
+    transform var(--duration-fast) ease;
+}
+
+.access-form__submit:hover:not(:disabled),
+.access-form__submit:focus-visible:not(:disabled) {
+  outline: 0;
+  background: var(--accent-hover);
+  color: var(--swatch-gray-000);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.access-form__submit:active:not(:disabled) {
+  transform: translateY(0) scale(0.99);
+}
+
+.access-form__submit:disabled {
+  cursor: wait;
+  opacity: 0.78;
+}
+
+.access-form__spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(10, 10, 10, 0.3);
+  border-color: color-mix(in srgb, currentColor 34%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: access-spin 700ms linear infinite;
+}
+
+.access-form.is-busy .access-form__spinner {
+  display: block;
+}
+
+.access-form.is-shaking {
+  animation: access-shake 320ms var(--ease-in-out);
+}
+
+.access-gate__note {
+  margin: var(--sp-4) auto 0;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.access-gate__noscript {
+  position: fixed;
+  right: var(--sp-4);
+  bottom: var(--sp-4);
+  left: var(--sp-4);
+  z-index: 1001;
+  max-width: 520px;
+  margin: auto;
+  border: 1px solid var(--swatch-fig);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  color: var(--ink);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.is-unlocking .access-gate__shell {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.985);
+  transition:
+    opacity 180ms ease,
+    transform 220ms var(--ease-out);
+}
+
+@keyframes access-gate-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes access-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes access-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 
 /* ================================
