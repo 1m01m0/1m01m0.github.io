@@ -13,7 +13,11 @@
   const encoder = typeof window.TextEncoder === "function" ? new window.TextEncoder() : null;
   const decoder = typeof window.TextDecoder === "function" ? new window.TextDecoder("utf-8", { fatal: true }) : null;
   const additionalData = encoder?.encode("emo-static-gate:v1");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let reduceMotion = reduceMotionQuery.matches;
+  reduceMotionQuery.addEventListener("change", (event) => {
+    reduceMotion = event.matches;
+  });
   let isBusy = false;
   let isUnlocked = false;
 
@@ -31,7 +35,7 @@
     if (passwordInput) passwordInput.readOnly = busy;
     if (revealButton) revealButton.disabled = busy;
     if (submitButton) submitButton.disabled = busy;
-    if (submitLabel) submitLabel.textContent = busy ? "正在验证" : "解锁访问";
+    if (submitLabel) submitLabel.textContent = busy ? "Verifying" : "Unlock portfolio";
   };
 
   const showFatalError = (message) => {
@@ -159,22 +163,7 @@
     });
   };
 
-  const loadThree = async () => {
-    if (window.THREE) return true;
-
-    try {
-      window.THREE = await import("./assets/vendor/three.module.js");
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
-  const prepareProtectedApp = () =>
-    Promise.all([
-      loadThree(),
-      loadClassicScript("assets/vendor/lucide.min.js", "lucide"),
-    ]);
+  const prepareProtectedApp = () => loadClassicScript("assets/vendor/lucide.min.js", "lucide");
 
   const bootProtectedApp = (source) => {
     const appScript = document.createElement("script");
@@ -212,11 +201,6 @@
     nav.insertBefore(navLinks, links[0]);
     links.forEach((link) => navLinks.append(link));
 
-    const indicator = document.createElement("span");
-    indicator.className = "nav-active-indicator";
-    indicator.setAttribute("aria-hidden", "true");
-    navLinks.prepend(indicator);
-
     const scrim = document.createElement("div");
     scrim.className = "nav-scrim";
     scrim.setAttribute("aria-hidden", "true");
@@ -243,22 +227,8 @@
     let activeLink = null;
     let scrollFrame = 0;
 
-    const layoutIndicator = () => {
-      if (!activeLink) {
-        navLinks.classList.remove("has-active");
-        return;
-      }
-
-      navLinks.style.setProperty("--nav-indicator-x", `${activeLink.offsetLeft}px`);
-      navLinks.style.setProperty("--nav-indicator-width", `${activeLink.offsetWidth}px`);
-      navLinks.classList.add("has-active");
-    };
-
     const setActiveLink = (nextLink) => {
-      if (activeLink === nextLink) {
-        layoutIndicator();
-        return;
-      }
+      if (activeLink === nextLink) return;
 
       activeLink = nextLink;
       links.forEach((link) => {
@@ -267,13 +237,10 @@
         if (isActive) link.setAttribute("aria-current", "location");
         else link.removeAttribute("aria-current");
       });
-      layoutIndicator();
     };
 
     const updateNavigationState = () => {
       scrollFrame = 0;
-      header.classList.toggle("is-scrolled", window.scrollY > 24);
-
       const marker = window.scrollY + Math.min(window.innerHeight * 0.36, 320);
       let nextLink = null;
       for (const item of sections) {
@@ -315,7 +282,6 @@
         navToggle?.setAttribute("aria-expanded", "false");
       }
       syncNavigationAvailability();
-      window.requestAnimationFrame(layoutIndicator);
     });
 
     scrim.addEventListener("click", closeNavigation);
@@ -385,7 +351,6 @@
       if (event.target instanceof Element && event.target.closest(".lang-option")) {
         window.requestAnimationFrame(() => {
           syncLanguageTabStops();
-          layoutIndicator();
           if (mobileNavQuery.matches && !nav.classList.contains("is-open")) {
             navToggle?.focus({ preventScroll: true });
           }
@@ -425,96 +390,7 @@
       }
     });
 
-    if (typeof ResizeObserver === "function") {
-      const resizeObserver = new ResizeObserver(layoutIndicator);
-      resizeObserver.observe(navLinks);
-      links.forEach((link) => resizeObserver.observe(link));
-    }
-
     updateNavigationState();
-  };
-
-  const enhanceProjectGrid = () => {
-    const grid = document.querySelector(".project-grid");
-    if (!(grid instanceof HTMLElement)) return;
-
-    const cards = Array.from(grid.querySelectorAll(".project-card"));
-    if (cards.length === 0) return;
-
-    grid.dataset.projectRail = "true";
-    grid.tabIndex = 0;
-    grid.setAttribute("role", "region");
-    grid.setAttribute("aria-labelledby", "research-title");
-    cards.forEach((card) => card.removeAttribute("data-tilt"));
-
-    let previousVisibleSignature = "";
-    const syncVisibleCount = () => {
-      const visibleCards = cards.filter((card) => !card.classList.contains("is-hidden"));
-      const visibleSignature = visibleCards.map((card) => cards.indexOf(card)).join(",");
-      grid.dataset.visibleCount = String(visibleCards.length);
-      if (previousVisibleSignature && visibleSignature !== previousVisibleSignature) grid.scrollLeft = 0;
-      previousVisibleSignature = visibleSignature;
-    };
-
-    if (typeof MutationObserver === "function") {
-      const cardObserver = new MutationObserver(syncVisibleCount);
-      cards.forEach((card) => cardObserver.observe(card, { attributes: true, attributeFilter: ["class"] }));
-    }
-    syncVisibleCount();
-  };
-
-  const enhanceStoryPresentation = () => {
-    const hero = document.querySelector("[data-hero]");
-    const heroCopy = hero?.querySelector(".hero-copy");
-    if (!(hero instanceof HTMLElement) || !(heroCopy instanceof HTMLElement) || hero.dataset.storyEnhanced === "true") return;
-
-    hero.dataset.storyEnhanced = "true";
-    document.body.classList.add("story-layout");
-    hero.querySelector("[data-tech-canvas]")?.remove();
-    hero.querySelector(".hero-motion")?.remove();
-    hero.querySelector(".hero-console")?.remove();
-
-    const stage = document.createElement("div");
-    stage.className = "hero-stage";
-
-    const visual = document.createElement("figure");
-    visual.className = "hero-product";
-    visual.setAttribute("aria-hidden", "true");
-
-    const image = document.createElement("img");
-    image.src = "assets/claude-workspace.png";
-    image.alt = "";
-    image.width = 1600;
-    image.height = 1600;
-    image.decoding = "async";
-    image.fetchPriority = "high";
-    visual.append(image);
-
-    hero.prepend(stage);
-    stage.append(visual, heroCopy);
-
-    let storyFrame = 0;
-    const updateStoryProgress = () => {
-      storyFrame = 0;
-      if (reduceMotion) {
-        hero.style.setProperty("--story-progress", "0");
-        return;
-      }
-
-      const rect = hero.getBoundingClientRect();
-      const travel = Math.max(hero.offsetHeight - window.innerHeight, 1);
-      const progress = Math.min(Math.max(-rect.top / travel, 0), 1);
-      hero.style.setProperty("--story-progress", progress.toFixed(4));
-    };
-
-    const scheduleStoryProgress = () => {
-      if (storyFrame) return;
-      storyFrame = window.requestAnimationFrame(updateStoryProgress);
-    };
-
-    window.addEventListener("scroll", scheduleStoryProgress, { passive: true });
-    window.addEventListener("resize", scheduleStoryProgress, { passive: true });
-    updateStoryProgress();
   };
 
   const focusProtectedContent = () => {
@@ -536,9 +412,7 @@
     focusTarget.addEventListener("blur", () => focusTarget.removeAttribute("tabindex"), { once: true });
 
     if (window.location.hash.length > 1) {
-      const header = document.querySelector("[data-header]");
-      const headerOffset = header instanceof HTMLElement ? Math.ceil(header.getBoundingClientRect().bottom + 16) : 96;
-      const targetTop = focusTarget.getBoundingClientRect().top + window.scrollY - headerOffset;
+      const targetTop = focusTarget.getBoundingClientRect().top + window.scrollY - 16;
       window.scrollTo({ top: Math.max(0, targetTop), behavior: "auto" });
     } else {
       window.scrollTo({ top: 0, behavior: "auto" });
@@ -568,8 +442,6 @@
     document.body.replaceChildren(fragment);
     root.classList.remove("is-gated", "is-unlocking");
     enhanceProtectedNavigation();
-    enhanceProjectGrid();
-    enhanceStoryPresentation();
 
     await waitForContentPaint();
     bootProtectedApp(bundle.script);
@@ -578,9 +450,7 @@
 
   const announceWrongPassword = () => {
     setBusy(false);
-    setStatus("密码不正确，请重试。", true);
-    form?.classList.remove("is-shaking");
-    window.requestAnimationFrame(() => form?.classList.add("is-shaking"));
+    setStatus("Incorrect password. Please try again.", true);
     if (passwordInput) {
       passwordInput.value = "";
       passwordInput.focus({ preventScroll: true });
@@ -593,12 +463,12 @@
 
     let candidate = passwordInput.value;
     if (candidate.length === 0) {
-      setStatus("请输入访问密码。", true);
+      setStatus("Enter the access password.", true);
       passwordInput.focus({ preventScroll: true });
       return;
     }
 
-    setStatus("正在安全验证…");
+    setStatus("Verifying securely…");
     setBusy(true);
 
     let bundle;
@@ -615,11 +485,11 @@
 
     isUnlocked = true;
     try {
-      setStatus("密码正确，正在加载页面…");
+      setStatus("Password accepted. Opening portfolio…");
       await mountProtectedSite(bundle);
     } catch {
       isUnlocked = false;
-      showFatalError("密码已通过，但页面加载失败。请刷新后重试。");
+      showFatalError("The password was accepted, but the portfolio could not load. Refresh and try again.");
     }
   };
 
@@ -653,7 +523,7 @@
 
     protectedPayload = validatePayload(JSON.parse(payloadNode.textContent));
   } catch {
-    showFatalError("安全验证组件无法启动，请使用最新版浏览器后重试。");
+    showFatalError("The secure access component could not start. Use a current browser and try again.");
     return;
   }
 
@@ -661,13 +531,12 @@
     if (!passwordInput) return;
     const willReveal = passwordInput.type === "password";
     passwordInput.type = willReveal ? "text" : "password";
-    revealButton.textContent = willReveal ? "隐藏" : "显示";
+    revealButton.textContent = willReveal ? "Hide" : "Show";
     revealButton.setAttribute("aria-pressed", String(willReveal));
     passwordInput.focus({ preventScroll: true });
   });
 
   passwordInput.addEventListener("input", () => {
-    form.classList.remove("is-shaking");
     if (passwordInput.getAttribute("aria-invalid") === "true") setStatus("");
   });
 
