@@ -4,8 +4,9 @@ A zero-build, password-protected static portfolio for academic applications. The
 
 ## Current design
 
-- Journal-inspired editorial system: masthead hero with a research statement, numbered section eyebrows, hairline separators
-- Professor-facing information order: About → Selected Projects → Education → Skills → Contact
+- Classic academic-homepage information layout (in the spirit of tairanhe.com): name → pipe-separated link bar → research statement → bio → bold-labeled Goal / Research Interest / Research Question
+- Journal-inspired editorial system: numbered section eyebrows, hairline separators
+- Professor-facing information order: intro → Selected Projects → Education → Skills → Contact
 - English-first interface with Simplified Chinese support
 - Warm-paper, collegiate-navy, and sienna palette
 - System serif display type (Iowan Old Style / Charter / Palatino stack), sans body, mono micro-labels; no external font requests
