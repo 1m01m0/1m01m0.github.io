@@ -1,89 +1,112 @@
 # emo Academic Portfolio
 
-A zero-build, password-protected static portfolio for academic applications. The public file contains only the access gate and an AES-GCM encrypted payload; portfolio markup and runtime code are decrypted in the visitor's browser after a successful unlock.
+A static academic portfolio with a browser-side password gate. The public page contains an AES-GCM encrypted bundle; the visitor's browser decrypts the portfolio markup and application script after a successful unlock.
 
-## Current design
+[Visit the site](https://emohomepage.ccwu.cc) · [Report an issue](https://github.com/1m01m0/1m01m0.github.io/issues)
 
-- Classic academic-homepage information layout (in the spirit of tairanhe.com): name → pipe-separated link bar → research statement → bio → bold-labeled Goal / Research Interest / Research Question
-- Journal-inspired editorial system: numbered section eyebrows, hairline separators
-- Professor-facing information order: intro → Selected Projects → Education → Skills → Contact
-- English-first interface with Simplified Chinese support
-- Warm-paper, collegiate-navy, and sienna palette
-- System serif display type (Iowan Old Style / Charter / Palatino stack), sans body, mono micro-labels; no external font requests
-- Direct links to two public repositories; no fabricated counts, placeholder papers, or decorative 3D demos
-- Scroll-reveal transitions, responsive navigation, keyboard focus states, and reduced-motion support
+## Overview
 
-## Architecture
+The site is designed for academic applications, with an English-first interface and Simplified Chinese support. Its visual system uses a warm-paper background, navy typography, system fonts, restrained transitions, and self-hosted icons.
 
-```text
-.
-├── index.html                 # Public password gate and encrypted payload
-├── styles.css                # Gate and academic portfolio styles
-├── script.js                 # Gate runtime and protected-app mounting
-├── tools/
-│   ├── gate-template.html    # Source template for the public gate
-│   └── password-gate.mjs     # Unpack, pack, and password rotation utility
-├── assets/
-│   └── vendor/
-│       └── lucide.min.js     # Self-hosted icons loaded after unlock
-└── CNAME                     # GitHub Pages custom domain
-```
+There is no framework, package manager, build service, or backend. Public HTML, CSS, JavaScript, and assets can be served by GitHub Pages or another static host. Protected content is maintained through the included Node.js utility.
 
-The ignored `.private/` directory exists only while editing protected content:
+## Preview locally
 
-```text
-.private/
-├── index.html                # Academic portfolio markup
-└── script.js                 # English/Chinese translations and UI behavior
-```
-
-## Preview
-
-Serve only the packed site:
+Requirements: Git, Python 3 for the example server, and a browser supporting Web Crypto. Node.js is needed only for maintaining the encrypted bundle; the maintenance utility uses built-in modules.
 
 ```bash
-python3 -m http.server 8080
+git clone https://github.com/1m01m0/1m01m0.github.io.git
+cd 1m01m0.github.io
+python3 -m http.server 8080 --bind 127.0.0.1
 ```
 
-Then open `http://localhost:8080`.
+Open <http://localhost:8080> and enter the site password. Use HTTPS when hosting remotely. The repository does not provide the password, and previewing the gate does not require decrypting the protected source files.
 
-## Editing protected content
+**Serve only the packed site.** Stop any preview server before unpacking protected content; never serve or deploy the repository while `.private/` exists.
 
-Never place the password in tracked files, command arguments, URLs, or browser storage. Read it from a hidden shell prompt and expose it only through the current process environment:
+## Edit protected content
 
-```bash
+Use a hidden prompt rather than placing a password in a command, tracked file, URL, or browser storage. The following prompt syntax is for **zsh**:
+
+```zsh
 read -s "SITE_PASSWORD?Site password: "
 export SITE_PASSWORD
 node tools/password-gate.mjs unpack
 ```
 
-Edit `.private/index.html` and `.private/script.js`, then repack immediately:
+Edit `.private/index.html` and `.private/script.js`. The latter holds the protected application's behavior and translations. Then repack:
 
-```bash
+```zsh
 node tools/password-gate.mjs pack
 unset SITE_PASSWORD
 ```
 
-`pack` rewrites `index.html` and deletes `.private/` after success. Do not preview, deploy, or commit while `.private/` exists.
+A successful `pack` rewrites `index.html` and removes `.private/`. Confirm it is gone before restarting the preview server or publishing:
 
-## Content guidance
+```bash
+test ! -d .private
+git diff --check
+git status --short
+```
 
-This site is intended for professors reviewing an undergraduate applicant. New sections should be evidence-led:
+If packing fails, keep the server stopped, resolve the error, and repack before deployment. Do not commit plaintext sources.
 
-- Use a real name, official degree title, expected graduation date, and a concise research-interest statement.
-- Link each project directly to code, a demo, a report, or a verifiable contribution.
-- Add GPA, rank, awards, publications, supervisors, or research experience only when the facts are confirmed.
-- Avoid popularity metrics, unsupported performance claims, placeholder publications, and projects owned by other people without a direct contribution link.
+## Maintain the gate
 
-Useful next additions, once available, are a PDF CV, project dates and roles, a school email address, and research/publication sections backed by real material.
+| Command | Effect |
+| --- | --- |
+| `node tools/password-gate.mjs help` | Show supported commands and password inputs |
+| `node tools/password-gate.mjs refresh` | Rebuild the public gate from its template without changing the encrypted payload |
+| `node tools/password-gate.mjs unpack` | Decrypt protected sources into `.private/` using `SITE_PASSWORD` |
+| `node tools/password-gate.mjs pack` | Encrypt edited sources using `SITE_PASSWORD`, then remove `.private/` |
+| `node tools/password-gate.mjs rotate` | Re-encrypt the current bundle using `SITE_PASSWORD` and `NEW_SITE_PASSWORD` without writing plaintext files |
 
-## Security note
+To rotate the password, read both values with hidden prompts in zsh:
 
-The site uses PBKDF2-SHA-256 and AES-256-GCM. This prevents protected markup from being shipped as plaintext, but a short human-chosen password is still vulnerable to offline guessing because the encrypted payload is public. Use a unique, high-entropy password for meaningful protection.
+```zsh
+read -s "SITE_PASSWORD?Current password: "
+read -s "NEW_SITE_PASSWORD?New password: "
+export SITE_PASSWORD NEW_SITE_PASSWORD
+node tools/password-gate.mjs rotate
+unset SITE_PASSWORD NEW_SITE_PASSWORD
+```
 
-## Constraints
+Choose a unique, high-entropy password of at least 16 characters. Rotation affects the newly published bundle; it cannot revoke copies of old bundles or content already decrypted by a visitor.
 
-- No package manager, framework, bundler, or build step
-- Keep `CNAME`
-- Keep Lucide self-hosted and loaded only after unlock
-- Preserve keyboard navigation and `prefers-reduced-motion`
+## Repository layout
+
+```text
+index.html                # Public gate and encrypted payload
+styles.css                # Gate and portfolio styles
+script.js                 # Public decryption and mounting runtime
+tools/
+├── gate-template.html    # Public gate source template
+└── password-gate.mjs     # Encryption maintenance utility
+assets/vendor/            # Self-hosted runtime dependencies
+CNAME                     # Custom domain for GitHub Pages
+.private/                 # Temporary, ignored plaintext after unpack
+```
+
+Change the public gate in `tools/gate-template.html`, then run `refresh`. Edit public styles in `styles.css`. Preserve `CNAME`, load Lucide only after unlock, and retain keyboard navigation and reduced-motion behavior. See [AGENTS.md](AGENTS.md) for maintenance conventions and [vendor notes](assets/vendor/README.md) for third-party assets.
+
+## Content and publishing
+
+Present verifiable academic evidence: a concise research statement, project contributions, education, skills, and contact details. Add publications, awards, rankings, or metrics only when confirmed, with direct supporting links where available.
+
+Publish the packed static files using the repository's GitHub Pages configuration. Keep `.private/` excluded from all deployment inputs; `.gitignore` alone does not stop a local server from exposing files. Preserve the custom domain unless intentionally migrating the site.
+
+## Security model and limitations
+
+The implementation uses PBKDF2-SHA-256 and AES-256-GCM. Encryption conceals the protected bundle until the password is supplied, but the ciphertext is public and can be copied for offline guessing. The gate has no server-side identity checks or password recovery. Public styles, assets, and repository history are outside the encrypted bundle.
+
+Treat it as a static sharing mechanism, and do not publish secrets or content requiring revocable, per-user access. Changes to encrypted content require the current password; public gate and style maintenance do not.
+
+## Verification and contribution
+
+For documentation changes, check links and `git diff --check`. For site changes, preview the packed result and verify the wrong-password state, successful unlock, responsive navigation, language switching, keyboard focus, and reduced-motion behavior. These interactive checks require the site password and are not implied by a successful static build.
+
+When reporting a problem, include browser/version and reproduction steps without the password or protected content.
+
+## License
+
+The repository does not currently include a project-wide license file. Ask the maintainer about reuse or redistribution; bundled third-party assets retain their own notices and terms.
