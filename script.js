@@ -412,7 +412,8 @@
     focusTarget.addEventListener("blur", () => focusTarget.removeAttribute("tabindex"), { once: true });
 
     if (window.location.hash.length > 1) {
-      const targetTop = focusTarget.getBoundingClientRect().top + window.scrollY - 16;
+      const headerHeight = document.querySelector("[data-header]")?.getBoundingClientRect().height || 0;
+      const targetTop = focusTarget.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
       window.scrollTo({ top: Math.max(0, targetTop), behavior: "auto" });
     } else {
       window.scrollTo({ top: 0, behavior: "auto" });
