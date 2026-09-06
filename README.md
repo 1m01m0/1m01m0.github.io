@@ -2,6 +2,16 @@
 
 A zero-build, password-protected static portfolio for academic applications. The public file contains only the access gate and an AES-GCM encrypted payload; portfolio markup and runtime code are decrypted in the visitor's browser after a successful unlock.
 
+## Preview
+
+Serve only the packed site:
+
+```bash
+python3 -m http.server 8080
+```
+
+Then open `http://localhost:8080`.
+
 ## Current design
 
 - Classic academic-homepage information layout (in the spirit of tairanhe.com): name → pipe-separated link bar → research statement → bio → bold-labeled Goal / Research Interest / Research Question
@@ -36,16 +46,6 @@ The ignored `.private/` directory exists only while editing protected content:
 ├── index.html                # Academic portfolio markup
 └── script.js                 # English/Chinese translations and UI behavior
 ```
-
-## Preview
-
-Serve only the packed site:
-
-```bash
-python3 -m http.server 8080
-```
-
-Then open `http://localhost:8080`.
 
 ## Editing protected content
 
