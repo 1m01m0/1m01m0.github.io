@@ -35,7 +35,7 @@
     if (passwordInput) passwordInput.readOnly = busy;
     if (revealButton) revealButton.disabled = busy;
     if (submitButton) submitButton.disabled = busy;
-    if (submitLabel) submitLabel.textContent = busy ? "Verifying" : "Unlock portfolio";
+    if (submitLabel) submitLabel.textContent = busy ? "Unlocking…" : "Unlock portfolio";
   };
 
   const showFatalError = (message) => {
@@ -464,12 +464,12 @@
 
     let candidate = passwordInput.value;
     if (candidate.length === 0) {
-      setStatus("Enter the access password.", true);
+      setStatus("Please enter your password.", true);
       passwordInput.focus({ preventScroll: true });
       return;
     }
 
-    setStatus("Verifying securely…");
+    setStatus("Checking your password…");
     setBusy(true);
 
     let bundle;
@@ -486,11 +486,11 @@
 
     isUnlocked = true;
     try {
-      setStatus("Password accepted. Opening portfolio…");
+      setStatus("Opening portfolio…");
       await mountProtectedSite(bundle);
     } catch {
       isUnlocked = false;
-      showFatalError("The password was accepted, but the portfolio could not load. Refresh and try again.");
+      showFatalError("Your password is correct, but the page could not load. Please refresh and try again.");
     }
   };
 
@@ -524,7 +524,7 @@
 
     protectedPayload = validatePayload(JSON.parse(payloadNode.textContent));
   } catch {
-    showFatalError("The secure access component could not start. Use a current browser and try again.");
+    showFatalError("This browser could not unlock the portfolio. Please try an up-to-date browser.");
     return;
   }
 
