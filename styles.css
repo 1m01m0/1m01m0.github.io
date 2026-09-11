@@ -1149,9 +1149,7 @@ body.academic-layout {
   height: 350px;
   margin-block: 16px 20px;
   object-fit: contain;
-  mix-blend-mode: multiply;
-  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent);
-  mask-composite: intersect;
+  mix-blend-mode: darken;
 }
 .access-gate__cover-title {
   margin-bottom: 22px;
@@ -1174,7 +1172,7 @@ body.academic-layout {
   aspect-ratio: 3 / 2;
   margin-top: 24px;
   background: url("assets/illustrations/study-vignette.webp") center / contain no-repeat;
-  mix-blend-mode: multiply;
+  mix-blend-mode: darken;
   content: "";
 }
 .hero-headline { margin-bottom: 24px; color: var(--navy); font-size: clamp(2.35rem, 3.8vw, 3.5rem); line-height: 1.13; }
@@ -1193,7 +1191,7 @@ body.academic-layout {
   width: min(100%, 260px);
   aspect-ratio: 3 / 2;
   background: center / contain no-repeat;
-  mix-blend-mode: multiply;
+  mix-blend-mode: darken;
   content: "";
 }
 .research-perspective[open]::after {
@@ -1212,8 +1210,30 @@ body.academic-layout {
   background-image: url("assets/illustrations/learning-library.webp");
 }
 .contact-section .contact-actions {
+  position: relative;
   padding-top: 160px;
-  background: url("assets/illustrations/contact-correspondence.webp") center top / 240px 160px no-repeat;
+}
+.contact-section .contact-actions::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(100%, 240px);
+  aspect-ratio: 3 / 2;
+  transform: translateX(-50%);
+  background: url("assets/illustrations/contact-correspondence.webp") center / contain no-repeat;
+  content: "";
+}
+
+/* Fade the paper at the image bounds, independently of text and controls. */
+.access-gate__illustration,
+.hero-profile::after,
+.research-perspective[open]::after,
+.projects-section .section-heading::after,
+#education .section-heading::after,
+.contact-section .contact-actions::before {
+  mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  mask-composite: intersect;
+  pointer-events: none;
 }
 .research-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; padding-top: 32px; border-top: 1px solid var(--line); }
 .research-grid .goal-line { margin-bottom: 0; color: var(--ink-soft); font-size: 0.86rem; line-height: 1.75; }

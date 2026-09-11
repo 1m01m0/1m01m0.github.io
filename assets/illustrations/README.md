@@ -1,5 +1,7 @@
 # Portfolio editorial illustrations
 
+Display treatment: light illustrations use `darken` blending and all illustrations use intersecting horizontal and vertical edge masks to merge paper margins into the page. The contact illustration is an independent pseudo-element so its mask never affects text or controls. Masters remain unchanged.
+
 ## Extended collection
 
 Four additional images were generated with the built-in image generation tool on 2026-09-11. Each has a preserved `-source.png` master and a quality-83 WebP derivative. The project banner is 1440px wide; other derivatives are 960px wide.
