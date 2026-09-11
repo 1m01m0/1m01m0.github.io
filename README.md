@@ -19,6 +19,7 @@ Then open `http://localhost:8080`.
 - Professor-facing information order: intro → Selected Projects → Education → Skills → Contact
 - English-first interface with Simplified Chinese support
 - Warm-paper, collegiate-navy, and sienna palette
+- Six original paper-textured illustrations across the access gate, introduction, research disclosure, projects, education, and contact areas; [asset gallery](assets/illustrations/gallery.html) and [source prompts](assets/illustrations/README.md)
 - System serif display type (Iowan Old Style / Charter / Palatino stack), sans body, mono micro-labels; no external font requests
 - Direct links to two public repositories; no fabricated counts, placeholder papers, or decorative 3D demos
 - Scroll-reveal transitions, responsive navigation, keyboard focus states, and reduced-motion support
@@ -34,6 +35,7 @@ Then open `http://localhost:8080`.
 │   ├── gate-template.html    # Source template for the public gate
 │   └── password-gate.mjs     # Unpack, pack, and password rotation utility
 ├── assets/
+│   ├── illustrations/      # Local WebP artwork, PNG masters, and asset gallery
 │   └── vendor/
 │       └── lucide.min.js     # Self-hosted icons loaded after unlock
 └── CNAME                     # GitHub Pages custom domain

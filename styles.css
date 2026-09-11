@@ -19,6 +19,7 @@
   --line: #dedbd2;
   --line-strong: #b7b09e;
   --error: #a63b32;
+  --paper-art: #eeeadf;
   --font-serif: "Iowan Old Style", "Charter", "Bitstream Charter", "Palatino Linotype", Palatino, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
@@ -233,13 +234,11 @@ html.is-unlocking .access-gate {
 .access-gate__shell {
   position: relative;
   display: grid;
-  grid-template-columns: 0.9fr 1fr;
-  width: min(100%, 62rem);
+  grid-template-columns: 1fr 1fr;
+  width: min(100%, 68rem);
   margin-block: 68px 24px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: 0 30px 80px -50px rgba(25, 49, 73, 0.3);
+  border-block: 1px solid var(--line-strong);
+  background: var(--page);
   min-width: 0;
 }
 
@@ -247,6 +246,7 @@ html.is-unlocking .access-gate {
   position: absolute;
   top: -74px;
   left: 0;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -290,6 +290,7 @@ html.is-unlocking .access-gate {
 }
 
 .access-gate__badge {
+  margin-left: auto;
   border-left: 1px solid var(--line-strong);
   padding-left: 12px;
   color: var(--ink-muted);
@@ -301,7 +302,7 @@ html.is-unlocking .access-gate {
 
 .access-gate__panel {
   align-self: center;
-  padding: clamp(32px, 5vw, 64px);
+  padding: clamp(32px, 5vw, 72px);
 }
 
 .access-gate__eyebrow {
@@ -348,7 +349,7 @@ html.is-unlocking .access-gate {
   align-items: stretch;
   min-height: 52px;
   border: 1px solid var(--line-strong);
-  border-radius: 10px;
+  border-radius: var(--radius);
   background: #fff;
   transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
 }
@@ -404,7 +405,7 @@ html.is-unlocking .access-gate {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border-radius: 10px;
+  border-radius: var(--radius);
   padding: 0 18px;
   background: var(--navy);
   color: #fff;
@@ -446,7 +447,7 @@ html.is-unlocking .access-gate {
   color: var(--ink-muted);
   font-size: 0.75rem;
   line-height: 1.6;
-  text-align: center;
+  text-align: left;
 }
 
 .access-gate__noscript {
@@ -1131,40 +1132,51 @@ body.academic-layout {
 .access-gate__cover {
   display: flex;
   flex-direction: column;
-  padding: 40px 44px;
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-  background: var(--navy-deep);
-  color: var(--page);
+  padding: 30px 38px;
+  background: var(--paper-art);
+  color: var(--ink);
 }
 .access-gate__edition, .access-gate__cover-foot {
   margin: 0;
-  color: #b7c4cd;
+  color: var(--ink-soft);
   font-family: var(--font-mono);
   font-size: 0.65rem;
   letter-spacing: 0.13em;
 }
-.access-gate__monogram {
-  margin-block: 12px;
-  font-family: var(--font-serif);
-  font-size: clamp(8rem, 17vw, 13rem);
-  font-style: italic;
-  line-height: 1.15;
+.access-gate__illustration {
+  align-self: center;
+  width: min(100%, 292px);
+  height: 350px;
+  margin-block: 16px 20px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent);
+  mask-composite: intersect;
 }
-.access-gate__monogram span { color: #cda88d; }
 .access-gate__cover-title {
-  margin-bottom: 38px;
+  margin-bottom: 22px;
   font-family: var(--font-serif);
-  font-size: 2.3rem;
+  font-size: 2.1rem;
+  font-weight: 400;
   line-height: 1.15;
   letter-spacing: -0.03em;
 }
-.access-gate__cover-foot { margin-top: auto; }
-.access-gate__panel h1 { font-size: clamp(2rem, 3.6vw, 2.8rem); line-height: 1.12; }
+.access-gate__cover-foot { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line-strong); }
+.access-gate__panel h1 { margin-bottom: 22px; font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 400; line-height: 1.08; letter-spacing: -0.04em; }
 .access-form__field:focus-within { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,64,94,0.08); }
 .access-form__field:has([aria-invalid="true"]) { border-color: var(--error); }
 .access-form__field input::placeholder { color: var(--ink-muted); font-size: 0.82rem; }
 .access-form__reveal { min-width: 52px; min-height: 44px; }
 .hero-profile .eyebrow { color: var(--accent); font-size: 0.68rem; }
+.hero-profile::after {
+  display: block;
+  width: min(100%, 340px);
+  aspect-ratio: 3 / 2;
+  margin-top: 24px;
+  background: url("assets/illustrations/study-vignette.webp") center / contain no-repeat;
+  mix-blend-mode: multiply;
+  content: "";
+}
 .hero-headline { margin-bottom: 24px; color: var(--navy); font-size: clamp(2.35rem, 3.8vw, 3.5rem); line-height: 1.13; }
 .hero-links a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; border-bottom: 1px solid var(--line-strong); }
 .hero-links svg { width: 15px; height: 15px; }
@@ -1174,6 +1186,35 @@ body.academic-layout {
 .research-perspective summary { padding-block: 13px; cursor: pointer; color: var(--navy); font-size: 0.84rem; font-weight: 600; }
 .research-perspective summary:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
 .research-statement { margin: 4px 0 20px; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.8; }
+.research-perspective[open]::after,
+.projects-section .section-heading::after,
+#education .section-heading::after {
+  display: block;
+  width: min(100%, 260px);
+  aspect-ratio: 3 / 2;
+  background: center / contain no-repeat;
+  mix-blend-mode: multiply;
+  content: "";
+}
+.research-perspective[open]::after {
+  margin: 0 auto 20px;
+  background-image: url("assets/illustrations/research-observation.webp");
+}
+.projects-section .section-heading::after {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: min(100%, 780px);
+  aspect-ratio: 3 / 1;
+  margin-top: 12px;
+  background-image: url("assets/illustrations/projects-assembly.webp");
+}
+#education .section-heading::after {
+  background-image: url("assets/illustrations/learning-library.webp");
+}
+.contact-section .contact-actions {
+  padding-top: 160px;
+  background: url("assets/illustrations/contact-correspondence.webp") center top / 240px 160px no-repeat;
+}
 .research-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; padding-top: 32px; border-top: 1px solid var(--line); }
 .research-grid .goal-line { margin-bottom: 0; color: var(--ink-soft); font-size: 0.86rem; line-height: 1.75; }
 .research-grid strong { display: block; margin-bottom: 12px; color: var(--accent); font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; }
@@ -1324,14 +1365,20 @@ html:lang(zh-CN) .hero-statement > p { line-height: 1.95; }
 
 @media (max-width: 680px) {
   .access-gate__shell { grid-template-columns: 1fr; width: min(100%, 28rem); margin-block: 66px 12px; }
-  .access-gate__cover { display: none; }
-  .access-gate__panel { padding: 32px 26px; }
+  .access-gate__cover { display: grid; grid-template-columns: 1fr 110px; gap: 12px; align-items: center; padding: 22px; }
+  .access-gate__edition { align-self: end; font-size: 0.55rem; }
+  .access-gate__illustration { grid-column: 2; grid-row: 1 / 3; width: 110px; height: 132px; margin: 0; }
+  .access-gate__cover-title { align-self: start; margin: 0; font-size: 1.6rem; }
+  .access-gate__cover-foot { display: none; }
+  .access-gate__panel { padding: 30px 6px; }
+  .access-gate__panel h1 { font-size: 2.6rem; }
   .access-gate__panel h1 br { display: none; }
   .access-gate__identity { top: -64px; }
   .access-gate__badge { font-size: 0.59rem; }
   .hero { grid-template-columns: 1fr; gap: 36px; }
   .hero h1 { margin-block: 26px 20px; }
   .hero-profile .hero-links { margin-bottom: 0; }
+  .hero-profile::after { width: min(100%, 260px); margin-top: 12px; }
   .hero-headline { max-width: 17ch; }
   .research-grid { grid-template-columns: 1fr; gap: 24px; }
   .research-grid strong { margin-bottom: 6px; }
