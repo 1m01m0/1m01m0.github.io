@@ -880,6 +880,29 @@ body.academic-layout {
   font-weight: 550;
 }
 
+.project-details div + div { margin-top: 10px; }
+.project-details dd a { display: inline-block; color: var(--accent); }
+.toy-card > .project-note { font-size: 0.78rem; color: var(--ink-muted); }
+.project-extensions { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 28px; margin-top: 24px; }
+.project-extensions p { margin: 0; color: var(--ink-muted); font-size: 0.8rem; }
+.project-extensions ul { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0; padding: 0; list-style: none; }
+.project-extensions a { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.85rem; color: var(--navy); }
+.project-toolkit { margin-top: 56px; }
+.project-toolkit h3 { margin-bottom: 10px; color: var(--navy); font-size: 1.65rem; }
+.project-toolkit > p { color: var(--ink-muted); font-size: 0.94rem; }
+.toolkit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; margin: 28px 0 0; padding: 0; list-style: none; }
+.toolkit-grid li { border-top: 1px solid var(--line); }
+.toolkit-grid a { display: block; padding: 22px 0; }
+.tool-name { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; color: var(--navy); font-weight: 600; }
+.tool-name svg { width: 16px; height: 16px; flex-shrink: 0; }
+.tool-description { display: block; margin-top: 8px; color: var(--ink-muted); font-size: 0.85rem; }
+.toolkit-grid a:hover .tool-name, .project-extensions a:hover { color: var(--accent); }
+
+@media (max-width: 700px) {
+  .toolkit-grid { grid-template-columns: 1fr; }
+  .project-details div { grid-template-columns: 60px minmax(0, 1fr); gap: 8px; }
+}
+
 .toy-card > a {
   display: inline-flex;
   align-self: flex-start;
