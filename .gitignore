@@ -6,6 +6,7 @@
 .private/
 
 # Local AI agent & IDE directories
+.agents/
 .codex/
 .claude/
 .cursor/
