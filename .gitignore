@@ -1,11 +1,14 @@
-.claude/.DS_Store
-.claude/skills/.DS_Store
-.claude/skills/web-design-engineer/README.md
-.claude/skills/web-design-engineer/README.zh-CN.md
-.claude/skills/web-design-engineer/references/advanced-patterns.md
-.claude/skills/web-design-engineer/SKILL.md
+# OS & temporary files
 .DS_Store
-.claude/launch.json
-.idea/1m01m0.github.io.iml
-.private/
 /index.html.tmp
+
+# Protected plaintext sources (never commit)
+.private/
+
+# Local AI agent & IDE directories
+.codex/
+.claude/
+.cursor/
+.gemini/
+.idea/
+.vscode/
