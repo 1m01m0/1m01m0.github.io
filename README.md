@@ -17,12 +17,12 @@ Then open `http://localhost:8080`.
 - Classic academic-homepage information layout (in the spirit of tairanhe.com): name → pipe-separated link bar → research statement → bio → bold-labeled Goal / Research Interest / Research Question
 - Journal-inspired editorial system: numbered section eyebrows, hairline separators
 - Professor-facing information order: intro → Selected Projects → Education → Skills → Contact
-- English-first interface with Simplified Chinese support
+- English-first interface with Simplified Chinese support across both the access gate and the protected portfolio
 - Warm-paper, collegiate-navy, and sienna palette
-- Six original paper-textured illustrations across the access gate, introduction, research disclosure, projects, education, and contact areas; [asset gallery](assets/illustrations/gallery.html) and [source prompts](assets/illustrations/README.md)
+- Six original paper-textured illustrations across the access gate, introduction, research disclosure, projects, education, and contact areas, each with tailored non-clipping edge masks; [asset gallery](assets/illustrations/gallery.html) and [source prompts](assets/illustrations/README.md)
 - System serif display type (Iowan Old Style / Charter / Palatino stack), sans body, mono micro-labels; no external font requests
-- Direct links to two public repositories; no fabricated counts, placeholder papers, or decorative 3D demos
-- Scroll-reveal transitions, responsive navigation, keyboard focus states, and reduced-motion support
+- Direct links to verified public repositories and developer tools; no fabricated counts, placeholder papers, or decorative 3D demos
+- Scroll-reveal transitions, responsive navigation, keyboard focus states, reduced-motion support, and professor-friendly `@media print` / Save-as-PDF styles
 
 ## Architecture
 
@@ -33,7 +33,8 @@ Then open `http://localhost:8080`.
 ├── script.js                 # Gate runtime and protected-app mounting
 ├── tools/
 │   ├── gate-template.html    # Source template for the public gate
-│   └── password-gate.mjs     # Unpack, pack, and password rotation utility
+│   ├── password-gate.mjs     # Unpack, pack, and password rotation utility
+│   └── visit-worker/         # Optional Cloudflare Worker for post-unlock visit alerts & KV logs
 ├── assets/
 │   ├── illustrations/      # Local WebP artwork, PNG masters, and asset gallery
 │   └── vendor/

@@ -1,0 +1,19 @@
+name = "emo-portfolio-visit"
+main = "worker.mjs"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Comma-separated origins allowed to post visit events.
+ALLOWED_ORIGINS = "https://emohomepage.ccwu.cc"
+# Which events trigger real-time push notifications ("unlock" or "unlock,click").
+NOTIFY_EVENTS = "unlock"
+# How many days to retain visit records in KV.
+LOG_TTL_DAYS = "180"
+
+[[kv_namespaces]]
+binding = "VISITS_KV"
+id = "ffbdd50eb68b45d6ba6aafd6f4302ab2"
+
+routes = [
+  { pattern = "api.antares.cc.cd", custom_domain = true }
+]

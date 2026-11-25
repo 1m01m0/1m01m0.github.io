@@ -1,15 +1,82 @@
 (() => {
   "use strict";
 
+  const GATE_COPY = {
+    en: {
+      pageTitle: "Portfolio access · emo",
+      langGroupLabel: "Language",
+      badge: "Private access",
+      edition: "PERSONAL PORTFOLIO",
+      coverLine1: "A space for",
+      coverLine2: "work & ideas.",
+      coverFoot: "emo / Academic portfolio",
+      eyebrow: "Academic portfolio",
+      titleLine1: "Welcome to ",
+      titleLine2: "my portfolio.",
+      lede: "Selected projects, research interests, and ongoing explorations. Enter your password to explore.",
+      passwordLabel: "Password",
+      placeholder: "Enter your password",
+      show: "Show",
+      hide: "Hide",
+      submit: "Unlock portfolio",
+      unlocking: "Unlocking…",
+      noteLine1: "Unlocked in your browser.",
+      noteLine2: "This site does not store your password.",
+      status: {
+        empty: "Please enter your password.",
+        checking: "Checking your password…",
+        opening: "Opening portfolio…",
+        wrong: "Incorrect password. Please try again.",
+        capsLock: "Caps Lock is on.",
+        loadError: "Your password is correct, but the page could not load. Please refresh and try again.",
+        unsupported: "This browser could not unlock the portfolio. Please try an up-to-date browser.",
+      },
+    },
+    "zh-CN": {
+      pageTitle: "访问验证 · emo",
+      langGroupLabel: "界面语言",
+      badge: "受保护访问",
+      edition: "个人学术主页",
+      coverLine1: "记录研究、",
+      coverLine2: "项目与思考。",
+      coverFoot: "emo / 学术主页",
+      eyebrow: "学术主页",
+      titleLine1: "欢迎访问",
+      titleLine2: "我的学术主页。",
+      lede: "收录代表性项目、研究兴趣与持续探索。请输入访问密码继续浏览。",
+      passwordLabel: "访问密码",
+      placeholder: "请输入访问密码",
+      show: "显示",
+      hide: "隐藏",
+      submit: "解锁主页",
+      unlocking: "正在解锁…",
+      noteLine1: "仅在当前浏览器本地解密，",
+      noteLine2: "本站不会存储或上传您的密码。",
+      status: {
+        empty: "请输入访问密码。",
+        checking: "正在验证密码…",
+        opening: "正在打开主页…",
+        wrong: "密码不正确，请重试。",
+        capsLock: "提示：当前已开启大写锁定（Caps Lock）。",
+        loadError: "密码正确，但页面未能正常加载，请刷新后重试。",
+        unsupported: "当前浏览器无法解锁此页面，请使用较新版本的浏览器。",
+      },
+    },
+  };
+
   const root = document.documentElement;
   const gate = document.querySelector("[data-access-gate]");
   const form = document.querySelector("[data-access-form]");
+  const field = document.querySelector("[data-access-field]");
   const passwordInput = document.querySelector("[data-access-password]");
   const revealButton = document.querySelector("[data-access-reveal]");
   const submitButton = document.querySelector("[data-access-submit]");
   const submitLabel = document.querySelector("[data-access-submit-label]");
   const status = document.querySelector("[data-access-status]");
   const payloadNode = document.querySelector("#protected-payload");
+  const langGroup = document.querySelector("[data-gate-lang-group]");
+  const gateLangButtons = Array.from(document.querySelectorAll("[data-gate-lang]"));
+  const gateTextNodes = Array.from(document.querySelectorAll("[data-gate-i18n]"));
   const encoder = typeof window.TextEncoder === "function" ? new window.TextEncoder() : null;
   const decoder = typeof window.TextDecoder === "function" ? new window.TextDecoder("utf-8", { fatal: true }) : null;
   const additionalData = encoder?.encode("emo-static-gate:v1");
@@ -18,14 +85,181 @@
   reduceMotionQuery.addEventListener("change", (event) => {
     reduceMotion = event.matches;
   });
+
+  let gateLang = "en";
+  let hasExplicitGateLang = false;
+  let statusState = { key: "", isError: false };
   let isBusy = false;
   let isUnlocked = false;
 
-  const setStatus = (message, isError = false) => {
+  const visitEndpoint = (() => {
+    const raw = (document.head.querySelector('meta[name="visit-endpoint"]')?.getAttribute("content") || "").trim();
+    if (!raw) return "";
+    try {
+      const parsed = new URL(raw, window.location.origin);
+      const isAllowedProtocol =
+        parsed.protocol === "https:" ||
+        (parsed.protocol === "http:" && (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1"));
+      return isAllowedProtocol ? parsed.href : "";
+    } catch {
+      return "";
+    }
+  })();
+
+  const captureInviteCode = () => {
+    try {
+      const current = new URL(window.location.href);
+      const raw = (current.searchParams.get("k") || current.searchParams.get("ref") || "").trim();
+      const hasInviteParam = current.searchParams.has("k") || current.searchParams.has("ref");
+      const sanitized = /^[a-zA-Z0-9_-]{1,32}$/.test(raw) ? raw : "";
+
+      if (hasInviteParam && typeof window.history?.replaceState === "function") {
+        current.searchParams.delete("k");
+        current.searchParams.delete("ref");
+        const nextUrl = `${current.pathname}${current.search}${current.hash}`;
+        window.history.replaceState(window.history.state, "", nextUrl);
+      }
+      return sanitized;
+    } catch {
+      return "";
+    }
+  };
+
+  const inviteCode = captureInviteCode();
+  const reportedClicks = new Set();
+
+  const reportVisit = (event, target = "") => {
+    if (!visitEndpoint) return;
+    if (event === "click") {
+      const dedupeKey = `${event}:${target}`;
+      if (reportedClicks.has(dedupeKey)) return;
+      reportedClicks.add(dedupeKey);
+    }
+
+    let timeZone = "";
+    try {
+      timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch {
+      timeZone = "";
+    }
+
+    const body = JSON.stringify({
+      event,
+      k: inviteCode,
+      target: String(target || "").slice(0, 200),
+      lang: root.lang || gateLang,
+      path: window.location.pathname || "/",
+      tz: timeZone,
+      vp: `${window.innerWidth}x${window.innerHeight}`,
+    });
+
+    try {
+      if (event === "click" && typeof navigator.sendBeacon === "function") {
+        const queued = navigator.sendBeacon(
+          visitEndpoint,
+          new Blob([body], { type: "text/plain;charset=UTF-8" }),
+        );
+        if (queued) return;
+      }
+
+      window
+        .fetch(visitEndpoint, {
+          method: "POST",
+          mode: "cors",
+          credentials: "omit",
+          keepalive: true,
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body,
+        })
+        .catch(() => {});
+    } catch {
+      // Visit reporting must never interrupt unlocking or browsing.
+    }
+  };
+
+  const bindProtectedClickTelemetry = () => {
+    if (!visitEndpoint) return;
+    document.body.addEventListener(
+      "click",
+      (event) => {
+        if (!(event.target instanceof Element)) return;
+
+        const link = event.target.closest('a[href^="http"], a[href^="mailto:"]');
+        if (link instanceof HTMLAnchorElement) {
+          const href = link.getAttribute("href") || "";
+          if (href) reportVisit("click", href);
+          return;
+        }
+
+        const summary = event.target.closest("details.research-perspective > summary");
+        if (summary) {
+          const details = summary.parentElement;
+          if (details instanceof HTMLDetailsElement && !details.open) {
+            reportVisit("click", "research-perspective");
+          }
+        }
+      },
+      { passive: true },
+    );
+  };
+
+  const getCopy = () => GATE_COPY[gateLang] || GATE_COPY.en;
+
+  const renderStatus = () => {
     if (!status || !passwordInput) return;
+    const message = statusState.key ? getCopy().status[statusState.key] || "" : "";
     status.textContent = message;
-    status.classList.toggle("is-error", isError);
-    passwordInput.setAttribute("aria-invalid", String(isError));
+    status.classList.toggle("is-error", statusState.isError);
+    passwordInput.setAttribute("aria-invalid", String(statusState.isError));
+  };
+
+  const setStatusKey = (key, isError = false) => {
+    statusState = { key, isError };
+    renderStatus();
+  };
+
+  const syncRevealLabel = () => {
+    if (!revealButton || !passwordInput) return;
+    const copy = getCopy();
+    const isRevealed = passwordInput.type === "text";
+    revealButton.textContent = isRevealed ? copy.hide : copy.show;
+    revealButton.setAttribute("aria-pressed", String(isRevealed));
+  };
+
+  const applyGateLanguage = (nextLang, explicit = false) => {
+    if (!GATE_COPY[nextLang]) return;
+    gateLang = nextLang;
+    if (explicit) hasExplicitGateLang = true;
+
+    const copy = getCopy();
+    root.lang = nextLang;
+    document.title = copy.pageTitle;
+    langGroup?.setAttribute("aria-label", copy.langGroupLabel);
+
+    gateTextNodes.forEach((node) => {
+      const key = node.getAttribute("data-gate-i18n");
+      if (key && typeof copy[key] === "string") {
+        node.textContent = copy[key];
+      }
+    });
+
+    if (passwordInput) passwordInput.placeholder = copy.placeholder;
+    if (submitLabel) submitLabel.textContent = isBusy ? copy.unlocking : copy.submit;
+    syncRevealLabel();
+    renderStatus();
+
+    gateLangButtons.forEach((button) => {
+      const isActive = button.getAttribute("data-gate-lang") === nextLang;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    });
+  };
+
+  const triggerFieldShake = () => {
+    if (reduceMotion || !field) return;
+    field.classList.remove("is-shaking");
+    void field.offsetWidth;
+    field.classList.add("is-shaking");
   };
 
   const setBusy = (busy) => {
@@ -35,12 +269,15 @@
     if (passwordInput) passwordInput.readOnly = busy;
     if (revealButton) revealButton.disabled = busy;
     if (submitButton) submitButton.disabled = busy;
-    if (submitLabel) submitLabel.textContent = busy ? "Unlocking…" : "Unlock portfolio";
+    if (submitLabel) {
+      const copy = getCopy();
+      submitLabel.textContent = busy ? copy.unlocking : copy.submit;
+    }
   };
 
-  const showFatalError = (message) => {
+  const showFatalError = (statusKey) => {
     setBusy(false);
-    setStatus(message, true);
+    setStatusKey(statusKey, true);
     if (passwordInput) passwordInput.disabled = true;
     if (revealButton) revealButton.disabled = true;
     if (submitButton) submitButton.disabled = true;
@@ -129,7 +366,7 @@
 
   const waitForGateExit = () => {
     if (reduceMotion) return Promise.resolve();
-    return new Promise((resolve) => window.setTimeout(resolve, 200));
+    return new Promise((resolve) => window.setTimeout(resolve, 190));
   };
 
   const waitForContentPaint = () =>
@@ -170,6 +407,25 @@
     appScript.textContent = `${source}\n//# sourceURL=protected-app.js`;
     document.body.append(appScript);
     appScript.remove();
+  };
+
+  const syncUnlockedLanguage = (targetLang) => {
+    if (!hasExplicitGateLang || targetLang === "en") return;
+    const options = Array.from(document.querySelectorAll(".lang-option"));
+    if (options.length === 0) return;
+
+    const target = options.find((option) => {
+      const attrLang = option.getAttribute("data-lang") || option.getAttribute("data-locale") || option.getAttribute("lang") || "";
+      if (attrLang.toLowerCase() === targetLang.toLowerCase()) return true;
+      if (targetLang === "zh-CN") {
+        return /中文|简体|zh/i.test(option.textContent || "");
+      }
+      return false;
+    });
+
+    if (target instanceof HTMLElement && !target.classList.contains("is-active")) {
+      target.click();
+    }
   };
 
   const copyBodyAttributes = (sourceBody) => {
@@ -244,7 +500,8 @@
       const marker = window.scrollY + Math.min(window.innerHeight * 0.36, 320);
       let nextLink = null;
       for (const item of sections) {
-        if (item.section.offsetTop <= marker) nextLink = item.link;
+        const sectionTop = item.section.getBoundingClientRect().top + window.scrollY;
+        if (sectionTop <= marker) nextLink = item.link;
         else break;
       }
 
@@ -439,19 +696,27 @@
       fragment.append(document.importNode(child, true));
     }
 
-    copyBodyAttributes(parsed.body);
-    document.body.replaceChildren(fragment);
-    root.classList.remove("is-gated", "is-unlocking");
-    enhanceProtectedNavigation();
-
-    await waitForContentPaint();
-    bootProtectedApp(bundle.script);
-    focusProtectedContent();
+    if (!reduceMotion) root.classList.add("is-entering");
+    try {
+      copyBodyAttributes(parsed.body);
+      document.body.replaceChildren(fragment);
+      root.classList.remove("is-gated", "is-unlocking");
+      enhanceProtectedNavigation();
+      bootProtectedApp(bundle.script);
+      syncUnlockedLanguage(gateLang);
+      bindProtectedClickTelemetry();
+      reportVisit("unlock");
+      focusProtectedContent();
+      if (!reduceMotion) await waitForContentPaint();
+    } finally {
+      root.classList.remove("is-entering");
+    }
   };
 
   const announceWrongPassword = () => {
     setBusy(false);
-    setStatus("Incorrect password. Please try again.", true);
+    setStatusKey("wrong", true);
+    triggerFieldShake();
     if (passwordInput) {
       passwordInput.value = "";
       passwordInput.focus({ preventScroll: true });
@@ -464,12 +729,13 @@
 
     let candidate = passwordInput.value;
     if (candidate.length === 0) {
-      setStatus("Please enter your password.", true);
+      setStatusKey("empty", true);
+      triggerFieldShake();
       passwordInput.focus({ preventScroll: true });
       return;
     }
 
-    setStatus("Checking your password…");
+    setStatusKey("checking", false);
     setBusy(true);
 
     let bundle;
@@ -486,11 +752,11 @@
 
     isUnlocked = true;
     try {
-      setStatus("Opening portfolio…");
+      setStatusKey("opening", false);
       await mountProtectedSite(bundle);
     } catch {
       isUnlocked = false;
-      showFatalError("Your password is correct, but the page could not load. Please refresh and try again.");
+      showFatalError("loadError");
     }
   };
 
@@ -513,6 +779,27 @@
     }
   };
 
+  const syncCapsLockHint = (event) => {
+    if (isBusy || isUnlocked || typeof event.getModifierState !== "function") return;
+    const capsLockOn = event.getModifierState("CapsLock");
+    if (capsLockOn && !statusState.isError) {
+      setStatusKey("capsLock", false);
+    } else if (!capsLockOn && statusState.key === "capsLock") {
+      setStatusKey("", false);
+    }
+  };
+
+  gateLangButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextLang = button.getAttribute("data-gate-lang");
+      if (nextLang) applyGateLanguage(nextLang, true);
+    });
+  });
+
+  field?.addEventListener("animationend", () => {
+    field.classList.remove("is-shaking");
+  });
+
   let protectedPayload;
   try {
     if (!gate || !form || !passwordInput || !submitButton || !status || !payloadNode) {
@@ -524,7 +811,7 @@
 
     protectedPayload = validatePayload(JSON.parse(payloadNode.textContent));
   } catch {
-    showFatalError("This browser could not unlock the portfolio. Please try an up-to-date browser.");
+    showFatalError("unsupported");
     return;
   }
 
@@ -532,13 +819,18 @@
     if (!passwordInput) return;
     const willReveal = passwordInput.type === "password";
     passwordInput.type = willReveal ? "text" : "password";
-    revealButton.textContent = willReveal ? "Hide" : "Show";
-    revealButton.setAttribute("aria-pressed", String(willReveal));
+    syncRevealLabel();
     passwordInput.focus({ preventScroll: true });
   });
 
   passwordInput.addEventListener("input", () => {
-    if (passwordInput.getAttribute("aria-invalid") === "true") setStatus("");
+    if (statusState.isError) setStatusKey("", false);
+  });
+
+  passwordInput.addEventListener("keydown", syncCapsLockHint);
+  passwordInput.addEventListener("keyup", syncCapsLockHint);
+  passwordInput.addEventListener("blur", () => {
+    if (statusState.key === "capsLock") setStatusKey("", false);
   });
 
   form.addEventListener("submit", handleSubmit);

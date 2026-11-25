@@ -1,6 +1,6 @@
 # Portfolio editorial illustrations
 
-Display treatment: light illustrations use `darken` blending and all illustrations use intersecting horizontal and vertical edge masks to merge paper margins into the page. The contact illustration is an independent pseudo-element so its mask never affects text or controls. Masters remain unchanged.
+Display treatment: light illustrations use `darken` blending, the dark contact illustration uses `lighten` blending over `--navy-deep`, and each illustration uses tailored intersecting horizontal and vertical edge masks (`--mask-x` / `--mask-y`, with `-webkit-mask-composite: source-in` fallback) tuned to its measured content bounds so edges merge into the page without fading subject details. The contact illustration is an independent pseudo-element so its mask never affects text or controls. Masters remain unchanged.
 
 ## Extended collection
 
@@ -12,7 +12,7 @@ Four additional images were generated with the built-in image generation tool on
 - `contact-correspondence.webp`: dark illustration above the contact actions.
 - `gallery.html`: standalone public contact sheet with all six illustrations and links to the masters and WebP files; contains no protected portfolio content.
 
-The protected portfolio has not been unlocked for visual acceptance; these CSS placements still require checking alongside the real content.
+All six illustrations have been visually verified against the unlocked portfolio across desktop (`1440×900`), tablet (`820×1024`), and mobile (`390×844`) viewports.
 
 ### research-observation prompt
 

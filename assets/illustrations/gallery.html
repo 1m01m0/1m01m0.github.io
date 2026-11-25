@@ -14,11 +14,32 @@
       h1 { margin: 6px 0 12px; font: 400 clamp(32px, 5vw, 48px)/1.2 "Iowan Old Style", "Songti SC", Georgia, serif; color: #22405e; }
       .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 24px; }
       figure { margin: 0; min-width: 0; }
-      .art { display: grid; place-items: center; aspect-ratio: 4 / 3; overflow: hidden; }
-      img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; mix-blend-mode: darken; mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent); mask-composite: intersect; }
-      .portrait img { width: 62.5%; }
-      .dark { background: #193149; }
-      .dark img { mix-blend-mode: normal; }
+      .art { display: grid; place-items: center; aspect-ratio: 4 / 3; overflow: hidden; padding: 12px; }
+      img {
+        display: block;
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        mix-blend-mode: darken;
+        -webkit-mask-image:
+          linear-gradient(to right, transparent, #000 var(--mask-x, 6%), #000 calc(100% - var(--mask-x, 6%)), transparent),
+          linear-gradient(to bottom, transparent, #000 var(--mask-y, 6%), #000 calc(100% - var(--mask-y, 6%)), transparent);
+        -webkit-mask-composite: source-in;
+        mask-image:
+          linear-gradient(to right, transparent, #000 var(--mask-x, 6%), #000 calc(100% - var(--mask-x, 6%)), transparent),
+          linear-gradient(to bottom, transparent, #000 var(--mask-y, 6%), #000 calc(100% - var(--mask-y, 6%)), transparent);
+        mask-composite: intersect;
+      }
+      .paper-cover { background: #edeae1; }
+      .portrait img { width: 66%; --mask-x: 4%; --mask-y: 3.5%; }
+      .vignette img { --mask-x: 8%; --mask-y: 8%; }
+      .observation img { --mask-x: 2%; --mask-y: 10%; }
+      .assembly img { --mask-x: 2.5%; --mask-y: 10%; }
+      .library img { --mask-x: 8%; --mask-y: 8%; }
+      .dark { background: #193149; border-radius: 6px; }
+      .dark img { mix-blend-mode: lighten; --mask-x: 10%; --mask-y: 14%; }
       figcaption { padding: 16px 0 12px; border-bottom: 1px solid #dedbd2; }
       h2 { margin: 0 0 4px; font-size: 16px; font-weight: 500; }
       figcaption p { margin: 0 0 8px; font-size: 13px; color: #626e78; }
@@ -33,11 +54,11 @@
     <main>
       <header><p>EMO / EDITORIAL ILLUSTRATIONS</p><h1>六幅插画，一个温暖的世界。</h1><p>纸张肌理、赤陶色与海军蓝，为学习、研究和创造留下空间。</p></header>
       <div class="gallery">
-        <figure><div class="art portrait"><img src="quiet-study.webp" alt="书本和植物旁的赤陶色拱门" /></div><figcaption><h2>01 · 思想之门</h2><p>入口页 / 主视觉</p><a href="quiet-study-source.png">高清原图</a><a href="quiet-study.webp">网页轻量版</a></figcaption></figure>
-        <figure><div class="art"><img src="study-vignette.webp" alt="打开的书本、几何构件和轨道线" /></div><figcaption><h2>02 · 学习与构建</h2><p>个人简介 / 开篇插画</p><a href="study-vignette-source.png">高清原图</a><a href="study-vignette.webp">网页轻量版</a></figcaption></figure>
-        <figure><div class="art"><img src="research-observation.webp" alt="放大镜与植物组成的观察主题插画" /></div><figcaption><h2>03 · 观察与探索</h2><p>研究方向 / 展开的研究说明</p><a href="research-observation-source.png">高清原图</a><a href="research-observation.webp">网页轻量版</a></figcaption></figure>
-        <figure><div class="art"><img src="projects-assembly.webp" alt="几何构件搭成低矮的小桥" /></div><figcaption><h2>04 · 从零搭建</h2><p>项目展示 / 横向插画</p><a href="projects-assembly-source.png">高清原图</a><a href="projects-assembly.webp">网页轻量版</a></figcaption></figure>
-        <figure><div class="art"><img src="learning-library.webp" alt="阶梯状书本、铅笔与植物枝叶" /></div><figcaption><h2>05 · 拾级而上</h2><p>学习经历 / 小幅插画</p><a href="learning-library-source.png">高清原图</a><a href="learning-library.webp">网页轻量版</a></figcaption></figure>
+        <figure><div class="art paper-cover portrait"><img src="quiet-study.webp" alt="书本和植物旁的赤陶色拱门" /></div><figcaption><h2>01 · 思想之门</h2><p>入口页 / 主视觉</p><a href="quiet-study-source.png">高清原图</a><a href="quiet-study.webp">网页轻量版</a></figcaption></figure>
+        <figure><div class="art vignette"><img src="study-vignette.webp" alt="打开的书本、几何构件和轨道线" /></div><figcaption><h2>02 · 学习与构建</h2><p>个人简介 / 开篇插画</p><a href="study-vignette-source.png">高清原图</a><a href="study-vignette.webp">网页轻量版</a></figcaption></figure>
+        <figure><div class="art observation"><img src="research-observation.webp" alt="放大镜与植物组成的观察主题插画" /></div><figcaption><h2>03 · 观察与探索</h2><p>研究方向 / 展开的研究说明</p><a href="research-observation-source.png">高清原图</a><a href="research-observation.webp">网页轻量版</a></figcaption></figure>
+        <figure><div class="art assembly"><img src="projects-assembly.webp" alt="几何构件搭成低矮的小桥" /></div><figcaption><h2>04 · 从零搭建</h2><p>项目展示 / 横向插画</p><a href="projects-assembly-source.png">高清原图</a><a href="projects-assembly.webp">网页轻量版</a></figcaption></figure>
+        <figure><div class="art library"><img src="learning-library.webp" alt="阶梯状书本、铅笔与植物枝叶" /></div><figcaption><h2>05 · 拾级而上</h2><p>学习经历 / 小幅插画</p><a href="learning-library-source.png">高清原图</a><a href="learning-library.webp">网页轻量版</a></figcaption></figure>
         <figure><div class="art dark"><img src="contact-correspondence.webp" alt="深蓝背景上的信件与连接的线条" /></div><figcaption><h2>06 · 开始对话</h2><p>联系区域 / 深色背景素材</p><a href="contact-correspondence-source.png">高清原图</a><a href="contact-correspondence.webp">网页轻量版</a></figcaption></figure>
       </div>
       <footer>原创 AI 辅助插画 · 装饰性视觉素材 <a href="../../index.html">返回网站预览</a></footer>
